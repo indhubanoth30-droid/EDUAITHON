@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>About — EduAIthon 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* Define color palette: White and Gold Theme */
+        :root {
+            --primary-color: #FFD700;    /* Gold for Card Titles */
+            --secondary-color: #FFD700; /* Bright Gold Accent */
+            --accent-color: #A87C00;    /* Deep Gold Contrast */
+            --purple-accent: #6A0DAD;    /* Deep Violet/Purple */
+            --header-bg: #f5f5f5;       /* Light Gray Header/Nav Background */
+            --bg-dark: #ffffff;         /* Main Body Background is WHITE */
+            --bg-card: #f8f8f8;         /* Light Card Background (Subtle off-white for depth) */
+            --text-on-dark: #333333;    /* Main text color is DARK GRAY */
+        }
+
+        /* ====== Base Styles: Light Background Theme ====== */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background: var(--bg-dark); /* MAIN BODY IS WHITE */
+            color: var(--text-on-dark); /* General body text is dark gray */
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 85%;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+            color: #111111; /* Always near black for headings */
+        }
+
+        p {
+            line-height: 1.7;
+            color: var(--text-on-dark); /* Paragraph text is dark gray */
+        }
+
+        /* Ensure section header paragraph is legible */
+        .section-header p {
+            color: var(--text-on-dark);
+        }
+
+        /* Keyframes for the sweeping effect (Brand Logo) */
+        @keyframes gradientShimmer {
+            /* Moves the gradient background from right-to-left continuously */
+            0% { background-position: 100% 0; }
+            100% { background-position: -100% 0; }
+        }
+        
+        /* Keyframes for the subtle card pulse effect */
+        @keyframes card-pulse {
+            0% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
+            50% { transform: scale(1.005); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+            100% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
+        }
+
+        /* Keyframes for the mission section glow effect */
+        @keyframes mission-glow {
+            0% { border-color: var(--primary-color); box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08); }
+            50% { border-color: var(--secondary-color); box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3); }
+            100% { border-color: var(--primary-color); box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08); }
+        }
+        
+        /* ====== Gradient Text Class (PURPLE & WHITE Shimmer - Used for Brand and some Cards) ====== */
+        .gradient-text {
+            /* Sweeps a bright WHITE color across a deep purple base */
+            background: linear-gradient(90deg, var(--purple-accent) 0%, var(--bg-dark) 50%, var(--purple-accent) 100%);
+            background-size: 400% 100%; 
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShimmer 3s infinite linear; 
+            /* Shadow is a subtle white glow */
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7); 
+        }
+
+        /* ====== Normal Purple Text (Used for H1, 'About IUCEE', and now 'About IASF') ====== */
+        .normal-purple-text {
+            color: var(--purple-accent); /* Solid Deep Purple */
+            /* Ensure no inherited animations or shadows interfere */
+            text-shadow: none; 
+            -webkit-text-fill-color: initial;
+            background: none;
+            animation: none;
+        }
+
+
+        /* ====== Header & Navbar ====== */
+        header {
+            background: var(--header-bg); /* Light Gray */
+            color: var(--text-on-dark);
+            padding: 18px 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            /* Lighter box shadow for light theme */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand a {
+            font-size: 1.9rem;
+            font-weight: 900;
+            text-decoration: none;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav a {
+            color: var(--text-on-dark); /* Links are now dark gray */
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        nav a.active { color: var(--accent-color); } /* Deep Gold for active link */
+        
+        nav a:hover {
+            color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        nav a::after {
+            content: "";
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            /* Gold gradient for hover effect */
+            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        nav a:hover::after, nav a.active::after {
+            width: 100%;
+        }
+
+        /* ====== Content Cards (About Grid) ====== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .info-card {
+            background: var(--bg-card); /* Off-White Card */
+            border-radius: 15px;
+            padding: 30px 40px;
+            /* Lighter box shadow for light theme */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08); 
+            border-left: 5px solid;
+            /* Card border uses gold gradient */
+            border-image: linear-gradient(180deg, var(--secondary-color), var(--accent-color)) 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            /* NEW: Apply subtle pulse animation */
+            animation: card-pulse 8s infinite ease-in-out;
+        }
+        
+        .info-card:nth-child(even) {
+             /* Alternate card border color for visual interest */
+            border-image: linear-gradient(180deg, var(--accent-color), var(--secondary-color)) 1;
+        }
+        
+        .info-card:hover {
+            /* NEW: More distinct lift on hover and stop pulse */
+            transform: translateY(-8px) scale(1.01);
+            background: #fffcee; /* Very light gold hue */
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3), 0 15px 30px rgba(0,0,0,0.15);
+            animation: none; /* Stop the constant pulse on hover for smoother interaction */
+        }
+
+        /* Adjusted card h2 styling to rely on .gradient-text for color */
+        .info-card h2 {
+            margin-top: 0;
+            font-size: 1.8rem;
+            /* color: var(--primary-color); REMOVED: Now set by gradient-text */
+        }
+        
+        /* ====== Mission Section (Unique Styling) ====== */
+        .mission-section {
+            padding: 50px 0;
+            text-align: center;
+            background: var(--bg-card); /* Light background */
+            margin: 60px 0;
+            border-radius: 20px;
+            /* Subtle shadow and gold outline */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--primary-color);
+            /* NEW: Apply subtle glow animation and transition for hover */
+            animation: mission-glow 6s infinite ease-in-out;
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        /* NEW: Distinct hover effect for mission section */
+        .mission-section:hover {
+            transform: perspective(1000px) rotateY(1deg); /* Subtle 3D tilt on hover */
+            box-shadow: 0 10px 40px rgba(106, 13, 173, 0.2); /* Subtle purple emphasis */
+        }
+
+        .mission-section p {
+             color: var(--text-on-dark); /* Dark text on light background */
+             font-weight: 300;
+        }
+        .mission-section h2 {
+            font-size: 2.2rem;
+            color: var(--purple-accent); /* Heading is now purple */
+            margin-bottom: 25px;
+            /* Subtle text shadow for glow */
+            text-shadow: 0 0 5px rgba(106, 13, 173, 0.5);
+        }
+        .values-list {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            list-style: none;
+            padding: 0;
+            margin-top: 30px;
+        }
+        .values-list li {
+            /* Light gold tinted background with gold border */
+            background: rgba(255, 215, 0, 0.05); 
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            border: 1px solid var(--secondary-color); 
+            color: var(--accent-color); /* Deep gold text */
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+        .values-list li:hover {
+            background: rgba(255, 215, 0, 0.15);
+            transform: scale(1.05);
+            /* Gold inner shadow on hover */
+            box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.4);
+        }
+
+        /* ====== Footer ====== */
+        .site-footer {
+            /* Dark footer for contrast */
+            background: #111111; 
+            color: white;
+            text-align: center;
+            padding: 25px 0;
+            margin-top: 60px;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+            border-top: 3px solid transparent;
+            /* Gold gradient top border */
+            border-image: linear-gradient(90deg, var(--secondary-color), var(--accent-color), var(--secondary-color)) 1;
+        }
+
+        .site-footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .site-footer a:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
+        
+        /* ====== Responsive Design ====== */
+        @media screen and (max-width: 900px) {
+            .about-grid {
+                grid-template-columns: 1fr; /* Single column layout on smaller screens */
+            }
+            .info-card {
+                padding: 25px 30px;
+            }
+            .values-list {
+                flex-direction: column;
+                gap: 15px;
+                align-items: center;
+            }
+            .values-list li {
+                width: 80%;
+            }
+            nav ul {
+                display: none; /* Hide navigation links on small screens */
+            }
+        }
+        @media screen and (max-width: 600px) {
+            .section-header h1 {
+                font-size: 2rem;
+            }
+            .mission-section {
+                padding: 30px 20px;
+                margin: 40px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="container nav">
+            <div class="brand">
+                <a class="gradient-text" href="index.html"><strong>EduAIthon</strong></a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="event.html">Event</a></li>
+                <li><a href="registration.html">Registration</a></li>
+                <li><a href="help.html">Help Desk</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="Coreteam.html">Core Team</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="section-wrapper">
+            <div class="container">
+                <div class="section-header">
+                    <!-- H1 uses the normal-purple-text class -->
+                    <h1 class="normal-purple-text">About the Initiative</h1>
+                    <p>Learn more about the core organizations, our vision, and the values driving EduAIthon 2026.</p>
+                </div>
+
+                <div class="about-grid">
+                    <!-- IUCEE -->
+                    <div class="info-card">
+                        <h2 class="normal-purple-text">About IUCEE</h2>
+                        <p>The Indo Universal Collaboration for Engineering Education (IUCEE), established in 2007, is a global initiative dedicated to enhancing the quality and relevance of **engineering education**. By connecting educators, students, researchers, and industry leaders, IUCEE fosters innovation, collaboration, and transformative practices that prepare engineers for a rapidly evolving world. Their core focus is on faculty development, curriculum modernization, and student experiential learning.</p>
+                    </div>
+
+                    <!-- IASF -->
+                    <div class="info-card">
+                        <h2 class="normal-purple-text">About IASF</h2>
+                        <p>The IUCEE Annual Student Forum (IASF) is a flagship **student-centered platform** conducted alongside IUCEE’s international conference. It brings together students from diverse institutions to exchange ideas, collaborate on projects, and develop innovative solutions to real-world challenges. The forum promotes leadership, creativity, and global exposure through interdisciplinary, hands-on learning. IASF is designed to be a crucible for next-generation engineering talent.</p>
+                    </div>
+
+                    <!-- Vision - EXPANDED -->
+                    <div class="info-card">
+                        <h2 class="normal-purple-text">EduAIthon 2026 Vision</h2>
+                        <p>Building on last year’s success, EduAIthon 2026 will be held as part of IASF under the theme: **“Co-Creating Sustainable, AI-Powered Solutions for Engineering Education.”** This year emphasizes sustainability, inclusivity, and long-term impact, inviting students to design adaptive, learner-centered solutions using AI, AR/VR, digital twins, and heutagogical practices. The core vision is to harness cutting-edge technology to build educational tools that are not only effective but also accessible and environmentally conscious, fostering responsible technological innovation in education.</p>
+                    </div>
+
+                    <!-- 2025 Recap -->
+                    <div class="info-card">
+                        <h2 class="normal-purple-text">Recap of EduAIthon 2025</h2>
+                        <p>EduAIthon 2025, hosted by RV College of Engineering, SPARK, and CEDLR in collaboration with IUCEE, followed the theme: **“Breaking Barriers – Simplifying Complex Engineering Concepts!”** Over 48 hours, 62 teams comprising around 300 participants explored AI, AR/VR, and immersive simulations to design innovative educational prototypes. The event created a vibrant platform for students to showcase creativity, teamwork, and leadership, resulting in several projects that were later integrated into academic research tracks.</p>
+                    </div>
+
+                    <!-- Target Audience and Collaboration - EXPANDED -->
+                    <div class="info-card">
+                        <h2 class="normal-purple-text">Target Audience & Collaboration</h2>
+                        <p>The EduAIthon welcomes all **undergraduate and postgraduate students** passionate about engineering, computer science, and education. We strongly encourage **multi-disciplinary teams** that include students from arts, design, and business, as true EdTech innovation requires a blend of technical expertise and human-centered design. Faculty members and industry experts participate as mentors and judges, offering critical feedback, domain expertise, and a pathway for turning prototypes into market-ready solutions. This collaborative environment ensures solutions are both technologically sound and commercially viable.</p>
+                    </div>
+
+                    <!-- Long-Term Impact and IP -->
+                    <div class="info-card">
+                        <h2 class="normal-purple-text">Expected Outcomes & IP Generation</h2>
+                        <p>The hackathon is designed to be an incubator for real-world solutions. Expected outcomes include **fully functional prototypes**, initial business/impact models, and documented **Intellectual Property (IP)** submissions. IUCEE provides resources and mentorship to encourage teams to pursue patent applications or spin off their projects into future EdTech startups post-event. Our goal is for every project to have a tangible path toward real-world implementation.</p>
+                    </div>
+
+                    <!-- Heutagogical Approach - EXPANDED -->
+                    <div class="info-card">
+                        <h2 class="normal-purple-text">The Heutagogical Approach</h2>
+                        <p>Heutagogy, or **self-determined learning**, is central to the EduAIthon process. Unlike traditional pedagogy, this approach encourages participants to define their own learning objectives and pathways within the challenge constraints. It is about **learning how to learn**, fostering resilience, adaptability, and true ownership over the problem-solving process—skills vital for future engineers and innovators. This means teams operate with a high degree of autonomy, making decisions about technologies, scope, and direction, guided by mentors rather than strict instructions.</p>
+                    </div>
+
+                </div>
+
+                <!-- Mission & Core Values Section -->
+                <div class="mission-section">
+                    <div class="container">
+                        <h2>Our Core Mission & Values</h2>
+                        <p>EduAIthon is more than just a hackathon; it is a commitment to the future of learning built on these guiding principles:</p>
+                        <ul class="values-list">
+                            <li>Innovation: Driving new ideas and technological advancements in EdTech.</li>
+                            <li>Sustainability: Ensuring solutions are long-lasting and environmentally responsible.</li>
+                            <li>Inclusivity: Creating educational tools that are accessible to all learners globally.</li>
+                            <li>Collaboration: Fostering teamwork across academic disciplines and global boundaries.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; IUCEE – EduAIthon 2026 | <a href="help.html">Contact</a> | <a href="#">Terms</a> | <a href="#">Privacy</a></p>
+        </div>
+    </footer>
+</body>
+
+</html>

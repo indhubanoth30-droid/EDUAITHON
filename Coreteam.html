@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Core Team — EduAIthon 2026</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --------------------------------------------------
+         * Black, Gold, Grey, and Accent Colors Definition
+         * -------------------------------------------------- */
+        :root {
+            --bg-deep: #0A0A0A; /* Main Background (Deep Black) */
+            --bg-card: #1C1C1E; /* Card Background (Dark Charcoal) */
+            --text-light: #F3F4F6; /* Main Text Color (Off-White) */
+            --text-secondary: #A0A0A0; /* Secondary Text Color (Soft Grey) */
+            --gold-bright: #FFD700; /* Bright Gold */
+            --gold-dark: #B8860B; /* Dark Metallic Gold (Accent) */
+            --border-dark: #333333; /* Border for subtle separation */
+
+            /* Organizing Committee Accent Colors */
+            --orange-vibrant: #FF8C00;
+            --purple-vibrant: #9333ea;
+            --fuschia-vibrant: #ec4899;
+            --cyan-vibrant: #06b6d4;
+
+            /* Faculty Mentors Accent Colors */
+            --orchid-vibrant: #DA70D6; /* New Orchid */
+            --lemonade-vibrant: #DFFF00; /* New Lemonade (Bright Yellow-Green) */
+            --blue-vibrant: #3b82f6; /* New Blue */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        /* --------------------------------------------------
+         * 1. Gold Text Animation (Shimmer)
+         * -------------------------------------------------- */
+        @keyframes gold-shift {
+            0% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+            100% { background-position: 0% 50%; } 
+        }
+        
+        .gradient-text {
+            /* Text gradient using the new gold palette */
+            background: linear-gradient(90deg, var(--gold-bright), var(--gold-dark), var(--gold-bright), var(--gold-dark), var(--gold-bright));
+            background-size: 600% auto; 
+            
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            
+            /* Apply the gold animation */
+            animation: gold-shift 8s ease-in-out infinite; 
+        }
+
+        /* --------------------------------------------------
+         * 2. Card Base Style
+         * -------------------------------------------------- */
+        .team-card {
+            background-color: var(--bg-card);
+            border: 2px solid var(--border-dark);
+            transition: all 0.3s ease-in-out, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        /* Default hover behavior (no pulse, but lift and gold image border) */
+        .team-card:hover {
+            transform: translateY(-8px); /* Lift effect */
+            /* Default: Ensure no unwanted animation is running */
+            animation: none;
+            /* Default border and shadow for cards without specific color classes */
+            border-color: var(--gold-bright);
+            box-shadow: 0 10px 20px -5px rgba(255, 215, 0, 0.2), 0 0 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .team-card img {
+            width: 100%;
+            max-width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin: 0 auto 1rem auto;
+            border: 4px solid var(--gold-dark);
+            transition: border-color 0.3s ease;
+        }
+        
+        .team-card:hover img {
+            border-color: var(--gold-bright);
+        }
+
+        /* --------------------------------------------------
+         * 3. Organizing Committee Specific Color Overrides (Solid Glow on Hover)
+         * -------------------------------------------------- */
+
+        /* 1. Alex Doe: Orange Override */
+        .card-orange:hover {
+            border-color: var(--orange-vibrant);
+            box-shadow: 0 10px 20px -5px rgba(255, 140, 0, 0.4), 0 0 15px rgba(255, 140, 0, 0.7);
+        }
+        .card-orange:hover img {
+            border-color: var(--orange-vibrant);
+        }
+
+        /* 2. Jane Smith: Purple Override */
+        .card-purple:hover {
+            border-color: var(--purple-vibrant);
+            box-shadow: 0 10px 20px -5px rgba(147, 51, 234, 0.4), 0 0 15px rgba(147, 51, 234, 0.7);
+        }
+        .card-purple:hover img {
+            border-color: var(--purple-vibrant);
+        }
+
+        /* 3. Sam Lee: Fuschia Override */
+        .card-fuschia:hover {
+            border-color: var(--fuschia-vibrant);
+            box-shadow: 0 10px 20px -5px rgba(236, 72, 153, 0.4), 0 0 15px rgba(236, 72, 153, 0.7);
+        }
+        .card-fuschia:hover img {
+            border-color: var(--fuschia-vibrant);
+        }
+
+        /* 4. Emily White: Cyan Override */
+        .card-cyan:hover {
+            border-color: var(--cyan-vibrant);
+            box-shadow: 0 10px 20px -5px rgba(6, 182, 212, 0.4), 0 0 15px rgba(6, 182, 212, 0.7);
+        }
+        .card-cyan:hover img {
+            border-color: var(--cyan-vibrant);
+        }
+        
+        /* --------------------------------------------------
+         * 4. Faculty Mentors Specific Color Overrides (Solid Glow on Hover)
+         * -------------------------------------------------- */
+
+        /* 1. Dr. Roberts: Orchid Override */
+        .card-orchid:hover {
+            border-color: var(--orchid-vibrant);
+            box-shadow: 0 10px 20px -5px rgba(218, 112, 214, 0.4), 0 0 15px rgba(218, 112, 214, 0.7);
+        }
+        .card-orchid:hover img {
+            border-color: var(--orchid-vibrant);
+        }
+
+        /* 2. Prof. Chen: Lemonade Override */
+        .card-lemonade:hover {
+            border-color: var(--lemonade-vibrant);
+            box-shadow: 0 10px 20px -5px rgba(223, 255, 0, 0.4), 0 0 15px rgba(223, 255, 0, 0.7);
+        }
+        .card-lemonade:hover img {
+            border-color: var(--lemonade-vibrant);
+        }
+
+        /* 3. Dr. Patel: Blue Override */
+        .card-blue:hover {
+            border-color: var(--blue-vibrant);
+            box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4), 0 0 15px rgba(59, 130, 246, 0.7);
+        }
+        .card-blue:hover img {
+            border-color: var(--blue-vibrant);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation (Converting to Tailwind/Inline style for single file) -->
+    <header class="bg-deep border-b border-gold-dark sticky top-0 z-10 shadow-lg">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="brand">
+                <a class="gradient-text text-3xl font-extrabold" href="index.html"><strong>EduAIthon</strong></a>
+            </div>
+            
+            <!-- Navigation Links -->
+            <ul class="flex space-x-6 text-sm font-medium hidden md:flex">
+                <li><a href="index.html" class="text-white hover:text-gold-bright transition duration-200">Home</a></li>
+                <li><a href="about.html" class="text-white hover:text-gold-bright transition duration-200">About</a></li>
+                <li><a href="event.html" class="text-white hover:text-gold-bright transition duration-200">Event</a></li>
+                <li><a href="registration.html" class="text-white hover:text-gold-bright transition duration-200">Registration</a></li>
+                <li><a href="help.html" class="text-white hover:text-gold-bright transition duration-200">Help Desk</a></li>
+                <li><a href="gallery.html" class="text-white hover:text-gold-bright transition duration-200">Gallery</a></li>
+                <li><a href="faq.html" class="text-white hover:text-gold-bright transition duration-200">FAQ</a></li>
+                <li><a href="Coreteam.html" class="text-gold-bright border-b-2 border-gold-bright transition duration-200">Core Team</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="py-16 md:py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <!-- H1 uses the gold-shift animation -->
+                <h1 class="gradient-text text-5xl md:text-6xl font-black mb-3 tracking-tight">Meet the Team</h1>
+                <p class="text-xl text-secondary font-semibold">The passionate individuals driving the EduAIthon initiative.</p>
+            </div>
+
+            <!-- Organizing Committee Section -->
+            <div class="mb-16">
+                <!-- Header uses gold-shift animation -->
+                <h2 class="text-3xl font-bold mb-8 text-center gradient-text">Organizing Committee</h2>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div class="team-card card-orange">
+                        <img src="https://placehold.co/300x300/002244/FFF?text=A.D." alt="Profile picture of Alex Doe">
+                        <h3 class="text-xl font-bold text-light mt-2">Alex Doe</h3>
+                        <p class="role text-sm text-secondary">Lead Coordinator</p>
+                    </div>
+                    <div class="team-card card-purple">
+                        <img src="https://placehold.co/300x300/0077b6/FFF?text=J.S." alt="Profile picture of Jane Smith">
+                        <h3 class="text-xl font-bold text-light mt-2">Jane Smith</h3>
+                        <p class="role text-sm text-secondary">Event Manager</p>
+                    </div>
+                    <div class="team-card card-fuschia">
+                        <img src="https://placehold.co/300x300/00b4d8/FFF?text=S.L." alt="Profile picture of Sam Lee">
+                        <h3 class="text-xl font-bold text-light mt-2">Sam Lee</h3>
+                        <p class="role text-sm text-secondary">Technical Lead</p>
+                    </div>
+                    <div class="team-card card-cyan">
+                        <img src="https://placehold.co/300x300/001b44/FFF?text=E.W." alt="Profile picture of Emily White">
+                        <h3 class="text-xl font-bold text-light mt-2">Emily White</h3>
+                        <p class="role text-sm text-secondary">Marketing Head</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Faculty Mentors Section - Now with Color-Coded Hover -->
+            <div>
+                <h2 class="text-3xl font-bold mb-8 text-center gradient-text">Faculty Mentors</h2>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 justify-center">
+                    <div class="team-card card-orchid">
+                        <img src="https://placehold.co/300x300/ff007c/FFF?text=Dr.+R" alt="Profile picture of Dr. Roberts">
+                        <h3 class="text-xl font-bold text-light mt-2">Dr. Roberts</h3>
+                        <p class="role text-sm text-secondary">AI & Machine Learning</p>
+                    </div>
+                    <div class="team-card card-lemonade">
+                        <img src="https://placehold.co/300x300/ffcc00/333?text=Prof.+C" alt="Profile picture of Prof. Chen">
+                        <h3 class="text-xl font-bold text-light mt-2">Prof. Chen</h3>
+                        <p class="role text-sm text-secondary">AR/VR & Simulation</p>
+                    </div>
+                    <div class="team-card card-blue">
+                        <img src="https://placehold.co/300x300/002e66/FFF?text=Dr.+P" alt="Profile picture of Dr. Patel">
+                        <h3 class="text-xl font-bold text-light mt-2">Dr. Patel</h3>
+                        <p class="role text-sm text-secondary">Sustainable Engineering</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-deep py-8 border-t-2 border-gold-dark mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-secondary text-sm font-medium">
+            <p>© IUCEE – EduAIthon 2026 | 
+                <a href="help.html" class="text-gold-bright hover:text-white transition duration-200">Contact</a> | 
+                <a href="#" class="text-gold-bright hover:text-white transition duration-200">Terms</a> | 
+                <a href="#" class="text-gold-bright hover:text-white transition duration-200">Privacy</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

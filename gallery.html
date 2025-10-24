@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gallery — EduAIthon 2026</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --------------------------------------------------
+         * Black, Gold, Grey, and Accent Colors Definition
+         * -------------------------------------------------- */
+        :root {
+            --bg-deep: #0A0A0A; /* Main Background (Deep Black) */
+            --bg-card: #1C1C1E; /* Card Background (Dark Charcoal) */
+            --text-light: #F3F4F6; /* Main Text Color (Off-White) */
+            --text-secondary: #A0A0A0; /* Secondary Text Color (Soft Grey) */
+            --gold-bright: #FFD700; /* Bright Gold */
+            --gold-dark: #B8860B; /* Dark Metallic Gold (Accent) */
+            --border-dark: #333333; /* Border for subtle separation */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        /* --------------------------------------------------
+         * 1. Gold Text Animation (Shimmer)
+         * -------------------------------------------------- */
+        @keyframes gold-shift {
+            0% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+            100% { background-position: 0% 50%; } 
+        }
+        
+        .gradient-text {
+            /* Text gradient using the new gold palette */
+            background: linear-gradient(90deg, var(--gold-bright), var(--gold-dark), var(--gold-bright), var(--gold-dark), var(--gold-bright));
+            background-size: 600% auto; 
+            
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            
+            /* Apply the gold animation */
+            animation: gold-shift 8s ease-in-out infinite; 
+        }
+
+        /* --------------------------------------------------
+         * 2. Gallery Item Animation (Gold Pulse)
+         * -------------------------------------------------- */
+        @keyframes gold-pulse-border {
+            0% { border-color: var(--gold-dark); box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
+            50% { border-color: var(--gold-bright); box-shadow: 0 0 25px rgba(255, 215, 0, 0.8); }
+            100% { border-color: var(--gold-dark); box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
+        }
+
+        /* Gallery Grid and Item Structure (retaining responsive grid logic) */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .gallery-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            /* Initial state */
+            border: 3px solid var(--border-dark); 
+            background-color: var(--bg-card); /* Ensure background is dark for hover glow */
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-10px); /* Enhanced Lift */
+            /* Apply the pulsing gold animation on hover */
+            animation: gold-pulse-border 2s infinite ease-in-out;
+            border-color: var(--gold-bright);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother image zoom */
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.05); /* Slightly less aggressive zoom */
+        }
+        
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            color: white;
+            padding: 20px 15px 15px;
+            font-weight: 600;
+            font-size: 1rem;
+            /* Initially hidden, slides up */
+            transform: translateY(100%); 
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover .gallery-caption {
+            transform: translateY(0);
+        }
+        
+        /* Lightbox styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .lightbox.active {
+            display: flex;
+        }
+        
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+        
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: var(--gold-bright);
+            font-size: 2.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            transition: transform 0.3s ease;
+        }
+        
+        .lightbox-close:hover {
+            transform: rotate(90deg) scale(1.1);
+            color: white;
+        }
+        
+        .lightbox-caption {
+            color: white;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        /* Responsive Overrides */
+        @media screen and (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .gallery-item img {
+                height: 220px;
+            }
+            
+            /* Always show caption on mobile for accessibility/touch */
+            .gallery-caption {
+                transform: translateY(0);
+                background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.4));
+            }
+            
+            .lightbox-content img {
+                max-height: 70vh;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .gallery-item img {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-deep text-light">
+    <!-- Header/Navigation converted to use Tailwind classes -->
+    <header class="bg-deep border-b border-gold-dark sticky top-0 z-10 shadow-lg" style="--gold-dark: #B8860B; --bg-deep: #0A0A0A;">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="brand">
+                <a class="gradient-text text-3xl font-extrabold" href="index.html"><strong>EduAIthon</strong></a>
+            </div>
+            
+            <ul class="flex space-x-6 text-sm font-medium hidden md:flex">
+                <li><a href="index.html" class="text-white hover:text-gold-bright transition duration-200">Home</a></li>
+                <li><a href="about.html" class="text-white hover:text-gold-bright transition duration-200">About</a></li>
+                <li><a href="event.html" class="text-white hover:text-gold-bright transition duration-200">Event</a></li>
+                <li><a href="registration.html" class="text-white hover:text-gold-bright transition duration-200">Registration</a></li>
+                <li><a href="help.html" class="text-white hover:text-gold-bright transition duration-200">Help Desk</a></li>
+                <li><a href="gallery.html" class="text-gold-bright border-b-2 border-gold-bright transition duration-200">Gallery</a></li>
+                <li><a href="faq.html" class="text-white hover:text-gold-bright transition duration-200">FAQ</a></li>
+                <li><a href="Coreteam.html" class="text-white hover:text-gold-bright transition duration-200">Core Team</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="py-16 md:py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h1 class="gradient-text text-5xl md:text-6xl font-black mb-3 tracking-tight">Event Gallery</h1>
+                    <p class="text-xl text-secondary font-semibold" style="--text-secondary: #A0A0A0;">A glimpse into the innovation, collaboration, and excitement of past events.</p>
+                </div>
+
+                <div class="gallery-grid">
+                    <div class="gallery-item" data-caption="Team Collaboration">
+                        <img src="https://placehold.co/600x400/002244/FFF?text=Team+Collaboration" alt="Team collaborating on a project">
+                        <div class="gallery-caption">Team Collaboration</div>
+                    </div>
+                    <div class="gallery-item" data-caption="Presentation Day">
+                        <img src="https://placehold.co/600x400/00b4d8/FFF?text=Presentation+Day" alt="Student presenting their project to judges">
+                        <div class="gallery-caption">Presentation Day</div>
+                    </div>
+                    <div class="gallery-item" data-caption="The Winning Moment">
+                        <img src="https://placehold.co/600x400/ff007c/FFF?text=Winning+Moment" alt="Winning team celebrating their victory">
+                        <div class="gallery-caption">The Winning Moment</div>
+                    </div>
+                    <div class="gallery-item" data-caption="Mentorship Session">
+                        <img src="https://placehold.co/600x400/ffcc00/333?text=Mentorship+Session" alt="Mentor guiding a team">
+                        <div class="gallery-caption">Mentorship Session</div>
+                    </div>
+                    <div class="gallery-item" data-caption="Late Night Coding">
+                        <img src="https://placehold.co/600x400/0077b6/FFF?text=Late+Night+Coding" alt="Students coding late at night">
+                        <div class="gallery-caption">Late Night Coding</div>
+                    </div>
+                    <div class="gallery-item" data-caption="Networking Event">
+                        <img src="https://placehold.co/600x400/002e66/FFF?text=Networking+Event" alt="Participants networking">
+                        <div class="gallery-caption">Networking Event</div>
+                    </div>
+                    <div class="gallery-item" data-caption="Innovation Workshop">
+                        <img src="https://placehold.co/600x400/023e8a/FFF?text=Workshop+Session" alt="Workshop in progress">
+                        <div class="gallery-caption">Innovation Workshop</div>
+                    </div>
+                    <div class="gallery-item" data-caption="Award Ceremony">
+                        <img src="https://placehold.co/600x400/f72585/FFF?text=Awards+Ceremony" alt="Award ceremony">
+                        <div class="gallery-caption">Award Ceremony</div>
+                    </div>
+                    <div class="gallery-item" data-caption="Team Photo">
+                        <img src="https://placehold.co/600x400/4cc9f0/FFF?text=Team+Photo" alt="All participants group photo">
+                        <div class="gallery-caption">Team Photo</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" id="closeLightbox">&times;</button>
+            <img id="lightboxImg" src="" alt="">
+            <div class="lightbox-caption" id="lightboxCaption"></div>
+        </div>
+    </div>
+
+    <footer class="bg-deep py-8 border-t-2 border-gold-dark mt-16" style="--gold-dark: #B8860B; --bg-deep: #0A0A0A;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-secondary text-sm font-medium" style="--text-secondary: #A0A0A0;">
+            <p>© IUCEE – EduAIthon 2026 | 
+                <a href="help.html" class="text-gold-bright hover:text-white transition duration-200" style="--gold-bright: #FFD700;">Contact</a> | 
+                <a href="#" class="text-gold-bright hover:text-white transition duration-200" style="--gold-bright: #FFD700;">Terms</a> | 
+                <a href="#" class="text-gold-bright hover:text-white transition duration-200" style="--gold-bright: #FFD700;">Privacy</a>
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // Gallery lightbox functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightboxImg');
+            const lightboxCaption = document.getElementById('lightboxCaption');
+            const closeLightbox = document.getElementById('closeLightbox');
+            
+            galleryItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const img = item.querySelector('img');
+                    const caption = item.getAttribute('data-caption');
+                    
+                    lightboxImg.src = img.src;
+                    lightboxCaption.textContent = caption;
+                    lightbox.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+            
+            closeLightbox.addEventListener('click', () => {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+            
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) {
+                    lightbox.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+            
+            // Close on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                    lightbox.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

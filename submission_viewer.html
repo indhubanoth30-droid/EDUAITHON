@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submitted Projects Viewer</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --accent-color: #9D4EDD; /* Medium Purple */
+            --accent-dark: #7B2CBF;  /* Darker Purple */
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 96rem; /* Large container for wide table */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Basic table styling */
+        .submission-row:hover {
+            background-color: #f3ffec; /* Light green hover for better visibility */
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+            transition: all 0.2s ease-in-out;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(123, 44, 191, 0.1);
+            border-top: 4px solid var(--accent-dark);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Modal Backdrop */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.7);
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .modal-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="py-4 mb-8 text-center">
+            <h1 class="text-4xl font-extrabold text-gray-800 mb-2">Project Submissions Log</h1>
+            <p class="text-gray-500">Real-time view of all saved project forms.</p>
+        </header>
+
+        <!-- Status and Loading Indicator -->
+        <div id="statusMessage" class="w-full max-w-4xl mx-auto mb-6 p-4 text-center rounded-xl bg-yellow-100 text-yellow-800">
+            Initializing connection...
+        </div>
+
+        <div id="loading" class="flex justify-center items-center py-10">
+            <div class="spinner"></div>
+            <p class="ml-3 text-gray-600">Loading submissions...</p>
+        </div>
+
+        <!-- Submissions Table -->
+        <div id="submissionsTableContainer" class="hidden shadow-xl rounded-xl overflow-x-auto bg-white">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">Date</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Team Name / Project ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Lead Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">Email</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Members</th>
+                    </tr>
+                </thead>
+                <tbody id="submissionsBody" class="bg-white divide-y divide-gray-200">
+                    <!-- Submission rows will be injected here -->
+                </tbody>
+            </table>
+            
+            <div id="noDataMessage" class="hidden text-center p-8 text-gray-500 font-semibold">
+                No submissions found yet. Submit a form to see data here!
+            </div>
+        </div>
+    </div>
+
+    <!-- Submission Detail Modal -->
+    <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop" onclick="closeModal(event)">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col" onclick="event.stopPropagation()">
+            
+            <!-- Modal Header -->
+            <div class="p-6 border-b flex justify-between items-center sticky top-0 bg-white z-10 rounded-t-xl">
+                <h2 class="text-2xl font-bold text-[var(--accent-dark)]" id="modalTitle">Submission Details</h2>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors text-2xl font-bold p-1">
+                    &times;
+                </button>
+            </div>
+
+            <!-- Modal Body (Content) -->
+            <div id="modalContent" class="p-6 space-y-6 overflow-y-auto flex-grow">
+                <!-- Content injected here -->
+                <div class="text-center text-gray-500">Loading submission data...</div>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="p-4 border-t sticky bottom-0 bg-white z-10 text-right rounded-b-xl">
+                <button onclick="closeModal()" class="px-6 py-2 bg-gray-200 text-gray-700 font-semibold rounded-full hover:bg-gray-300 transition-colors">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, setLogLevel, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- DOM Elements ---
+        const submissionsBody = document.getElementById('submissionsBody');
+        const submissionsTableContainer = document.getElementById('submissionsTableContainer');
+        const loadingIndicator = document.getElementById('loading');
+        const statusMessage = document.getElementById('statusMessage');
+        const noDataMessage = document.getElementById('noDataMessage');
+        const detailModal = document.getElementById('detailModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        
+        // --- GLOBAL FIREBASE SETUP ---
+        setLogLevel('debug');
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let db = null;
+        let auth = null;
+        let isFirebaseReady = false; 
+
+        /**
+         * Initializes Firebase and authenticates the user.
+         */
+        async function initializeFirebase() {
+            try {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                // Set authentication persistence to session
+                await setPersistence(auth, browserSessionPersistence);
+
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                
+                isFirebaseReady = true;
+                console.log("Firebase initialized and authenticated.");
+                statusMessage.classList.add('hidden');
+                startDataListener(); // Start listening for data once authenticated
+
+            } catch (error) {
+                console.error("Error initializing Firebase or signing in:", error);
+                statusMessage.textContent = "Error: Could not connect to the database. Check console for details.";
+                statusMessage.classList.remove('bg-yellow-100', 'text-yellow-800');
+                statusMessage.classList.add('bg-red-100', 'text-red-700');
+                loadingIndicator.classList.add('hidden');
+            }
+        }
+
+        /**
+         * Starts the real-time listener for the submissions collection.
+         */
+        function startDataListener() {
+            if (!db || !isFirebaseReady) {
+                console.error("Database not ready to start listener.");
+                return;
+            }
+
+            // Public collection path for cross-user visibility
+            const collectionPath = `artifacts/${appId}/public/data/submissions`;
+            const submissionsRef = collection(db, collectionPath);
+            const submissionsQuery = query(submissionsRef);
+            
+            console.log(`Listening to collection: ${collectionPath}`);
+
+            // onSnapshot provides real-time data updates
+            onSnapshot(submissionsQuery, (snapshot) => {
+                loadingIndicator.classList.add('hidden');
+                submissionsTableContainer.classList.remove('hidden');
+                submissionsBody.innerHTML = ''; 
+                
+                const submissions = [];
+                snapshot.forEach(doc => {
+                    submissions.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+
+                if (submissions.length === 0) {
+                    noDataMessage.classList.remove('hidden');
+                    return;
+                }
+                
+                noDataMessage.classList.add('hidden');
+                renderSubmissions(submissions);
+
+            }, (error) => {
+                console.error("Error listening to submissions: ", error);
+                statusMessage.textContent = "Error loading submissions in real-time.";
+                statusMessage.classList.remove('hidden');
+                statusMessage.classList.remove('bg-yellow-100', 'text-yellow-800');
+                statusMessage.classList.add('bg-red-100', 'text-red-700');
+            });
+        }
+
+        /**
+         * Converts a Firestore timestamp or JS timestamp to a readable date string.
+         * @param {number|string|Object} timestamp - The timestamp value.
+         * @returns {string} Formatted date string or 'N/A'.
+         */
+        function formatDate(timestamp) {
+            if (!timestamp) return 'N/A';
+            
+            let date;
+            if (typeof timestamp === 'object' && typeof timestamp.toDate === 'function') {
+                // Handle Firestore Timestamp object
+                date = timestamp.toDate();
+            } else if (typeof timestamp === 'number' || typeof timestamp === 'string') {
+                // Handle standard JS timestamp (number) or date string
+                date = new Date(timestamp);
+            } else {
+                return 'N/A';
+            }
+
+            // Check if date is valid
+            if (isNaN(date.getTime())) {
+                return 'Invalid Date';
+            }
+
+            return date.toLocaleDateString();
+        }
+
+        /**
+         * Renders the fetched submissions into the table body.
+         * @param {Array<Object>} submissions - Array of submission objects.
+         */
+        function renderSubmissions(submissions) {
+            submissionsBody.innerHTML = '';
+
+            // Sort submissions by timestamp descending (most recent first)
+            submissions.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+            submissions.forEach(submission => {
+                const row = document.createElement('tr');
+                row.className = 'submission-row transition duration-200 ease-in-out';
+                row.setAttribute('data-id', submission.id);
+                row.onclick = () => showDetails(submission);
+
+                const teamName = submission.teamInfo?.teamName || `Project ID: ${submission.id.substring(0, 8)}...`;
+                const leadName = submission.teamInfo?.members?.[0]?.name || submission.personalDetails?.fullName || 'N/A';
+                const leadEmail = submission.personalDetails?.emailAddress || 'N/A';
+                const dateString = formatDate(submission.timestamp);
+                const membersCount = submission.teamInfo?.members?.length || 0;
+
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
+                        ${dateString}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                        ${teamName}
+                        <!-- Mobile View: Show Lead Name and Date below Team Name -->
+                        <div class="sm:hidden text-xs text-gray-500 mt-1">
+                            Lead: ${leadName} | Date: ${dateString}
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
+                        ${leadName}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-500 hidden lg:table-cell">
+                        ${leadEmail !== 'N/A' ? `<a href="mailto:${leadEmail}" onclick="event.stopPropagation();" class="hover:underline">${leadEmail}</a>` : 'N/A'}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-[var(--accent-dark)]">
+                            ${membersCount}
+                        </span>
+                    </td>
+                `;
+                submissionsBody.appendChild(row);
+            });
+        }
+        
+        /**
+         * Displays the full details of a submission in a modal.
+         * @param {Object} submission - The full submission object.
+         */
+        function showDetails(submission) {
+            modalTitle.textContent = submission.teamInfo?.teamName || `Project ID: ${submission.id}`;
+            
+            // Format Data for Display
+            const leadName = submission.personalDetails?.fullName || 'N/A';
+            const teamMembersHtml = (submission.teamInfo?.members || [])
+                .map(member => `<li class="text-sm border-b border-dashed pb-1 last:border-b-0"><span class="font-medium">${member.name || 'Unknown'}</span> (Sex: ${member.sex || 'N/A'})</li>`)
+                .join('');
+            
+            // Function to safely display date in full
+            const detailedDate = submission.timestamp ? new Date(submission.timestamp).toLocaleString() : 'N/A';
+
+            const contentHtml = `
+                <!-- Personal Details -->
+                <div class="border-b pb-4">
+                    <h3 class="font-bold text-lg text-gray-700 mb-2 border-l-4 border-[var(--accent-color)] pl-2">Team Lead Details</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 text-sm">
+                        <p><span class="font-medium">Name:</span> ${leadName}</p>
+                        <p><span class="font-medium">Email:</span> <a href="mailto:${submission.personalDetails?.emailAddress}" class="text-blue-600 hover:underline">${submission.personalDetails?.emailAddress || 'N/A'}</a></p>
+                        <p><span class="font-medium">Institution:</span> ${submission.personalDetails?.institution || 'N/A'}</p>
+                        <p><span class="font-medium">Country:</span> ${submission.personalDetails?.country || 'N/A'}</p>
+                        <p><span class="font-medium">Contact:</span> ${submission.personalDetails?.contactNumber || 'N/A'}</p>
+                        <p><span class="font-medium">Submitted At:</span> ${detailedDate}</p>
+                    </div>
+                </div>
+
+                <!-- Team Info -->
+                <div class="border-b pb-4">
+                    <h3 class="font-bold text-lg text-gray-700 mb-2 border-l-4 border-[var(--accent-color)] pl-2">Team Information</h3>
+                    <p class="font-medium mb-2">Team Members (${submission.teamInfo?.numMembers || 0} Total):</p>
+                    <ul class="pl-4 mt-1 space-y-2 bg-gray-50 p-4 rounded-lg shadow-inner">
+                        ${teamMembersHtml || '<li class="text-sm italic text-gray-500">No members listed.</li>'}
+                    </ul>
+                </div>
+
+                <!-- Project Details -->
+                <div>
+                    <h3 class="font-bold text-lg text-gray-700 mb-2 border-l-4 border-[var(--accent-color)] pl-2">Project Details</h3>
+                    <p class="font-medium mt-3 text-base text-[var(--accent-dark)]">Problem Statement:</p>
+                    <div class="bg-purple-50 p-3 rounded-md text-gray-700 whitespace-pre-wrap">${submission.projectDetails?.problemStatement || 'N/A'}</div>
+
+                    <p class="font-medium mt-4 text-base text-[var(--accent-dark)]">Solution:</p>
+                    <div class="bg-purple-50 p-3 rounded-md text-gray-700 whitespace-pre-wrap">${submission.projectDetails?.solution || 'N/A'}</div>
+                </div>
+            `;
+
+            modalContent.innerHTML = contentHtml;
+            detailModal.classList.add('open');
+            detailModal.classList.remove('hidden');
+        }
+
+        /** Closes the detail modal. */
+        function closeModal(event) {
+            // Close if clicking the X button OR the backdrop (detailModal itself)
+            if (!event || event.target.id === 'detailModal') {
+                detailModal.classList.remove('open');
+                // Use a short delay to allow the opacity transition to finish before hiding
+                setTimeout(() => {
+                     detailModal.classList.add('hidden');
+                }, 300);
+            }
+        }
+        
+        window.closeModal = closeModal; // Expose globally for HTML event handlers
+
+        // Start the application
+        document.addEventListener('DOMContentLoaded', initializeFirebase);
+    </script>
+</body>
+</html>

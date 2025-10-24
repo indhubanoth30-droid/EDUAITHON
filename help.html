@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Help Desk — EduAIthon 2026</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Load Lucide icons for professional-looking SVGs -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* --------------------------------------------------
+         * Black, Gold, Grey, and Accent Colors Definition
+         * -------------------------------------------------- */
+        :root {
+            --bg-deep: #ededed; /* Main Background (Deep Black) */
+            --bg-card: #f1abe5; /* Card Background (Dark Charcoal) */
+            --text-light: #6ae8d3; /* Main Text Color (Off-White) */
+            --text-secondary: #62d5be; /* Secondary Text Color (Soft Grey) */
+            --gold-bright: #f0da0ef1; /* Bright Gold */
+            --gold-dark: #d32ed8; /* Dark Metallic Gold (Accent) */
+            --border-dark: #14e962; /* Border for subtle separation */
+            --cyan-bright: #3a13d7; /* Cyan Color (Used for Form) */
+            
+            /* CONTACT CARD ACCENTS */
+            --orange-bright: #f46816; /* Bright Orange */
+            --purple-bright: #5d14ee; /* Medium Purple */
+            --fuschia-bright: #ffdd00; /* Fuchsia */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* --------------------------------------------------
+         * Gold Text Animation (Shimmer)
+         * -------------------------------------------------- */
+        @keyframes gold-shift {
+            0% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+            100% { background-position: 0% 50%; } 
+        }
+        
+        .gradient-text {
+            /* Text gradient using the new gold palette */
+            background: linear-gradient(90deg, var(--gold-bright), var(--gold-dark), var(--gold-bright), var(--gold-dark), var(--gold-bright));
+            background-size: 600% auto; 
+            
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            
+            /* Apply the gold animation */
+            animation: gold-shift 8s ease-in-out infinite; 
+        }
+
+        /* --------------------------------------------------
+         * Button Pulse Animation (Gold) - Kept for Submit Button Hover
+         * -------------------------------------------------- */
+        @keyframes pulse-shadow {
+            0% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.4); }
+            50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+            100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.4); }
+        }
+
+        /* --------------------------------------------------
+         * Card and Form Base Styling
+         * -------------------------------------------------- */
+        .info-card {
+            background-color: var(--bg-card);
+            /* Initial border color is dark grey, but overridden below for contact cards */
+            border: 1px solid var(--border-dark);
+            transition: transform 0.3s ease, border-color 0.3s;
+        }
+
+        /* Base hover: only lift the card */
+        .info-card:hover {
+            transform: translateY(-4px); 
+        }
+
+        /* --- APPLY CONSTANT BORDER COLORS (NO PULSE) --- */
+        
+        /* Primary Contact (Orange) */
+        .card-orange {
+            /* Set the solid orange border */
+            border-color: var(--orange-bright) !important;
+        }
+
+        /* For Inquiries (Purple) */
+        .card-purple {
+            /* Set the solid purple border */
+            border-color: var(--purple-bright) !important;
+        }
+
+        /* Event Location (Fuchsia) */
+        .card-fuschia {
+            /* Set the solid fuschia border */
+            border-color: var(--fuschia-bright) !important;
+        }
+
+        /* Form Styling */
+        .contact-form-container {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-dark);
+            transition: transform 0.3s ease, box-shadow 0.3s, border-color 0.3s;
+        }
+
+        /* Cyan Glow on Hover for Form (Kept the hover behavior here for less visual clutter) */
+        .contact-form-container:hover {
+            transform: translateY(-4px); 
+            /* Cyan glow for box shadow */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6), 0 0 15px var(--cyan-bright); 
+            /* Cyan border outline */
+            border-color: var(--cyan-bright); 
+        }
+
+        /* Button Styling and Animation */
+        .btn-primary {
+            background-color: var(--gold-dark);
+            color: var(--bg-deep); /* Black text on gold button */
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            font-weight: 700;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--gold-bright);
+            transform: translateY(-1px);
+            /* Pulse shadow on hover */
+            animation: pulse-shadow 2s infinite ease-in-out;
+            color: #000;
+        }
+    </style>
+</head>
+
+<body class="antialiased flex flex-col min-h-screen">
+    <header class="sticky top-0 z-20 bg-bg-deep shadow-lg">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="brand">
+                <a class="gradient-text text-3xl font-extrabold" href="index.html"><strong>EduAIthon</strong></a>
+            </div>
+            <!-- Navigation Links (Tailwind responsive for desktop/mobile menu) -->
+            <ul class="flex space-x-6 text-sm font-medium hidden md:flex">
+                <li><a href="index.html" class="text-white hover:text-gold-bright transition duration-200">Home</a></li>
+                <li><a href="about.html" class="text-white hover:text-gold-bright transition duration-200">About</a></li>
+                <li><a href="event.html" class="text-white hover:text-gold-bright transition duration-200">Event</a></li>
+                <li><a href="registration.html" class="text-white hover:text-gold-bright transition duration-200">Registration</a></li>
+                <li><a href="helpdesk.html" class="text-gold-bright border-b-2 border-gold-bright transition duration-200">Help Desk</a></li>
+                <li><a href="gallery.html" class="text-white hover:text-gold-bright transition duration-200">Gallery</a></li>
+                <li><a href="faq.html" class="text-white hover:text-gold-bright transition duration-200">FAQ</a></li>
+                <li><a href="Coreteam.html" class="text-white hover:text-gold-bright transition duration-200">Core Team</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="flex-grow">
+        <div class="py-16 md:py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <!-- H1 uses the gold-shift animation -->
+                    <h1 class="gradient-text text-5xl md:text-7xl font-black mb-4 tracking-tight">Get in Touch</h1>
+                    <p class="text-xl text-secondary font-semibold max-w-3xl mx-auto">
+                        We're here to help. Reach out with your questions regarding registration, themes, or event logistics.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                    <!-- Contact Information -->
+                    <div class="lg:col-span-1 space-y-8">
+                        <!-- Header is shimmering gold -->
+                        <h2 class="text-3xl font-bold mb-4 gradient-text">Contact Details</h2>
+
+                        <!-- Primary Contact Card (Orange Solid Border) -->
+                        <div class="info-card card-orange p-6 rounded-xl shadow-lg">
+                            <h3 class="text-xl font-extrabold text-white mb-2 flex items-center">
+                                <i data-lucide="user-check" class="w-5 h-5 mr-3 text-gold-bright"></i>
+                                Primary Contact
+                            </h3>
+                            <p class="text-secondary mt-3"><strong>Dr. Krishna Vedula</strong></p>
+                            <p class="text-sm text-secondary">Founder & Executive Director, IUCEE</p>
+                        </div>
+
+                        <!-- Inquiries Card (Purple Solid Border) -->
+                        <div class="info-card card-purple p-6 rounded-xl shadow-lg">
+                            <h3 class="text-xl font-extrabold text-white mb-2 flex items-center">
+                                <i data-lucide="mail-check" class="w-5 h-5 mr-3 text-gold-bright"></i>
+                                For Inquiries
+                            </h3>
+                            <p class="text-secondary mt-3">
+                                <strong>Email:</strong> 
+                                <a href="mailto:iasf@iucee.org" class="text-gold-bright hover:underline transition duration-200">iasf@iucee.org</a>
+                            </p>
+                            <p class="text-secondary">
+                                <strong>Website:</strong> 
+                                <a href="https://iucee.org" target="_blank" rel="noopener" class="text-gold-bright hover:underline transition duration-200">iucee.org</a>
+                            </p>
+                        </div>
+
+                        <!-- Location Card (Fuchsia Solid Border) -->
+                        <div class="info-card card-fuschia p-6 rounded-xl shadow-lg">
+                            <h3 class="text-xl font-extrabold text-white mb-2 flex items-center">
+                                <i data-lucide="map-pin" class="w-5 h-5 mr-3 text-gold-bright"></i>
+                                Event Location
+                            </h3>
+                            <p class="text-secondary mt-3">Moinabad, Telangana, India</p>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form (Cyan outline on hover) -->
+                    <div class="contact-form-container lg:col-span-2 p-8 rounded-xl shadow-2xl">
+                        <h2 class="text-3xl font-bold mb-6 gradient-text border-b pb-3 border-border-dark">Send us a Message</h2>
+                        <form class="contact-form space-y-6">
+                            <div class="form-group">
+                                <label for="name" class="block text-sm font-medium mb-2 text-white">Full Name</label>
+                                <input type="text" id="name" name="name" required class="w-full p-3 rounded-lg bg-bg-deep border border-border-dark focus:border-gold-bright focus:ring-1 focus:ring-gold-bright text-light transition duration-200">
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="block text-sm font-medium mb-2 text-white">Email Address</label>
+                                <input type="email" id="email" name="email" required class="w-full p-3 rounded-lg bg-bg-deep border border-border-dark focus:border-gold-bright focus:ring-1 focus:ring-gold-bright text-light transition duration-200">
+                            </div>
+                            <div class="form-group">
+                                <label for="message" class="block text-sm font-medium mb-2 text-white">Message</label>
+                                <textarea id="message" name="message" rows="5" required class="w-full p-3 rounded-lg bg-bg-deep border border-border-dark focus:border-gold-bright focus:ring-1 focus:ring-gold-bright text-light transition duration-200"></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary w-full py-3 rounded-xl text-lg tracking-wider">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer bg-bg-deep py-8 border-t-2 border-gold-dark mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-secondary text-sm font-medium">
+            <p>© IUCEE – EduAIthon 2026 | 
+                <a href="#" class="text-gold-bright hover:text-white transition duration-200">Contact</a> | 
+                <a href="#" class="text-gold-bright hover:text-white transition duration-200">Terms</a> | 
+                <a href="#" class="text-gold-bright hover:text-white transition duration-200">Privacy</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // NOTE: This is a placeholder for form submission.
+        document.querySelector('.contact-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            console.log('Form submission intercepted. Data: ', new FormData(e.target));
+            alert('Message Sent! (Simulated)'); 
+        });
+        
+        // Custom message box function instead of alert() for the simulation
+        function alert(message) {
+            const container = document.createElement('div');
+            container.className = 'fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50';
+            
+            const box = document.createElement('div');
+            box.className = 'bg-bg-card p-6 rounded-xl shadow-2xl max-w-sm mx-4 text-center border-2 border-gold-bright';
+            
+            const title = document.createElement('h3');
+            title.className = 'text-2xl font-bold text-gold-bright mb-4';
+            title.textContent = 'Success!';
+
+            const msg = document.createElement('p');
+            msg.className = 'text-white mb-6';
+            msg.textContent = message;
+
+            const button = document.createElement('button');
+            button.className = 'btn-primary py-2 px-6 rounded-lg text-sm transition duration-300';
+            button.textContent = 'Close';
+            button.addEventListener('click', () => container.remove());
+
+            box.append(title, msg, button);
+            container.appendChild(box);
+            document.body.appendChild(container);
+        }
+
+    </script>
+</body>
+</html>

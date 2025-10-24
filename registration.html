@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration — EduAIthon 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Load Lucide icons for professional-looking SVGs -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom styles using Poppins for the aesthetic gradient text */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
+
+        /* --------------------------------------------------
+         * Light Theme Palette Definition (Maintaining Gold/Orange/Purple Accents)
+         * -------------------------------------------------- */
+        :root {
+            --bg-deep: #FFFFFF;         /* Main Background (White) */
+            --bg-card: #F9FAFB;         /* Card Background (Light Off-White) */
+            --text-light: #1F2937;      /* Main Text Color (Dark Charcoal) */
+            --text-secondary: #6B7280;  /* Secondary Text Color (Medium Gray) */
+            --gold-bright: #FFD700;     /* Bright Gold */
+            --gold-dark: #B8860B;       /* Dark Metallic Gold (Accent) */
+            --gold-accent: #997500;     /* Darker Gold for subtle details */
+            --border-dark: #D1D5DB;     /* Border for subtle separation (Light Gray) */
+            --blue-accent: #3b82f6;     /* Bright Blue Accent for fees */
+            
+            /* Orange for Prizes/Highlights */
+            --orange-bright: #ff6600; /* Vibrant Orange */
+            --orange-dark: #cc5200;   /* Deeper Orange */
+            
+            /* NEW: Purple and Violet for Gradient Text */
+            --purple-main: #8A2BE2; /* BlueViolet (used for purple outline) */
+            --violet-main: #EE82EE; /* Violet (used for solid text color) */
+            
+            /* Specific colors for Objectives & Themes animation */
+            --color-red: #ef4444;     
+            --color-cyan: #06b6d4;    /* CYAN (used for solid text color) */
+            --color-magenta: #d946ef; 
+            
+            /* NEW STEP BORDER COLORS */
+            --color-step-orange: #ff9900; /* BRIGHT ORANGE */
+            --color-step-blue: #3b82f6;   
+            --color-step-red: #ef4444;    
+            --color-step-purple: #a855f7; 
+
+            /* NEW: Solid Green Color */
+            --green-bright: #10B981; /* Emerald Green */
+
+            /* Solid Blue Color (for step 2 text) */
+            --blue-normal: #1D4ED8; /* Darker blue */
+
+            /* NEW: Solid Red Color for Step 3 */
+            --red-normal: #DC2626; /* Strong Red (Tailwind red-600) */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-deep); /* Switched to White background */
+            color: var(--text-light); /* Switched to Dark text */
+            min-height: 10vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* NEW: Solid Purple Text Class for the main header, guidelines, and registration guide header */
+        .text-solid-purple {
+            color: var(--purple-main) !important;
+        }
+
+        /* NEW: Solid Orange Text Class for submissions and objectives */
+        .text-solid-orange {
+            color: var(--orange-bright) !important;
+        }
+
+        /* NEW: Solid Green Text Class for benefits and judging criteria */
+        .text-solid-green {
+            color: var(--green-bright) !important;
+        }
+        
+        /* NEW: Solid Violet Text Class for the core themes */
+        .text-solid-violet {
+            color: var(--violet-main) !important;
+        }
+        
+        /* NEW: Solid Cyan Text Class for the core themes */
+        .text-solid-cyan {
+            color: var(--color-cyan) !important;
+        }
+
+        /* NEW: Solid Blue Text Class */
+        .text-solid-blue {
+            color: var(--blue-normal) !important;
+        }
+
+        /* NEW: Solid Red Text Class for Step 3 */
+        .text-solid-red {
+            color: var(--red-normal) !important;
+        }
+        
+        /* NEW: Normal Orange Text Class for Step 1 AND Fee Card Header */
+        .text-normal-orange {
+            color: var(--color-step-orange) !important; /* Using the border orange #ff9900 */
+        }
+
+        /* NEW: Solid Gold Text Class for Total Pool */
+        .text-solid-gold {
+            color: var(--gold-dark) !important;
+        }
+
+        /* --------------------------------------------------
+         * Green Icon/Arrow Styling
+         * -------------------------------------------------- */
+        .benefits-icon-green,
+        .benefits-arrow-green {
+            color: var(--green-bright) !important;
+        }
+
+        /* --------------------------------------------------
+         * Gold Color Animation (Text Shimmer) 
+         * -------------------------------------------------- */
+        @keyframes gold-shift {
+            /* Cycles through gold tones for a shimmering effect */
+            0% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+            100% { background-position: 0% 50%; } 
+        }
+        
+        .gradient-text {
+            /* Text gradient now includes Gold, Orange, Purple, and Violet */
+            background: linear-gradient(90deg, 
+                var(--gold-bright),   /* Yellow-Gold */
+                var(--purple-main),   /* Purple */
+                var(--orange-bright), /* Orange */
+                var(--violet-main),   /* Violet */
+                var(--gold-dark),     /* Dark Gold */
+                var(--purple-main)    /* Purple */
+            );
+            background-size: 800% auto; /* Increased size for smoother transition of more colors */
+            
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; 
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            
+            /* Apply the gold animation */
+            animation: gold-shift 8s ease-in-out infinite; 
+        }
+        
+        /* Apply color shift animation ONLY to the brand, fees headline, guidelines headings, objectives, and themes */
+        header .brand .gradient-text,
+        .fee-card-headline .gradient-text,
+        /* Exclude solid purple, solid orange, solid green, solid violet, solid cyan, and solid red titles from animation */
+        .info-card h2.gradient-text:not(.text-solid-purple):not(.text-solid-orange):not(.text-solid-green):not(.text-solid-violet):not(.text-solid-cyan):not(.text-solid-red), 
+        /* Exclude the solid purple registration guide header */
+        .reg-guide-header .gradient-text:not(.text-solid-purple) { 
+            animation: gold-shift 8s ease-in-out infinite; 
+        }
+        
+        /* NEW: Step Card Titles also use the gold gradient */
+        /* MODIFIED: The h3 in step-card should only use gradient-text if it doesn't have a solid color class */
+        .step-card h3.gradient-text:not(.text-solid-purple):not(.text-solid-blue):not(.text-solid-red):not(.text-normal-orange) {
+             animation: gold-shift 8s ease-in-out infinite;
+        }
+
+
+        /* --------------------------------------------------
+         * Orange Color Animation (Text Shimmer for Individual Prizes)
+         * -------------------------------------------------- */
+        .prize-amount-orange {
+            animation: gold-shift 8s ease-in-out infinite; /* Use the same timing */
+            font-family: 'Poppins', sans-serif;
+            font-weight: 900;
+            /* Use the Orange gradient for prize text */
+            background: linear-gradient(90deg, var(--orange-bright), var(--orange-dark), var(--orange-bright), var(--orange-dark), var(--orange-bright));
+            background-size: 600% auto; 
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* --------------------------------------------------
+         * Gold Color Animation (Text Shimmer for Total Pool)
+         * NOTE: Since we changed the Total Pool to solid gold, this CSS rule is now only applied if the class is still present elsewhere.
+         * -------------------------------------------------- */
+        .prize-amount-gold {
+            animation: gold-shift 8s ease-in-out infinite; 
+            font-family: 'Poppins', sans-serif;
+            font-weight: 900;
+            /* Use the GOLD gradient */
+            background: linear-gradient(90deg, var(--gold-bright), var(--gold-dark), var(--gold-bright), var(--gold-dark), var(--gold-bright));
+            background-size: 600% auto; 
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+
+        /* --------------------------------------------------
+         * Gold Pulse Animation (Fees Card Border & Total Pool & Deadline Card)
+         * -------------------------------------------------- */
+        @keyframes gold-pulse {
+            /* Subtle pulse effect for the Fees box border */
+            0% { border-color: var(--gold-dark); box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
+            50% { border-color: var(--gold-bright); box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); } /* Increased opacity for visibility on white */
+            100% { border-color: var(--gold-dark); box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
+        }
+        
+        /* --------------------------------------------------
+         * Orange Pulse Animation (Winning Prizes Card Border & Guidelines Card)
+         * -------------------------------------------------- */
+         @keyframes orange-pulse {
+            /* Distinct pulse effect for the Winning Prizes box border */
+            0% { border-color: var(--orange-dark); box-shadow: 0 0 10px rgba(255, 102, 0, 0.2); }
+            50% { border-color: var(--orange-bright); box-shadow: 0 0 20px rgba(255, 102, 0, 0.5); } /* Increased opacity for visibility on white */
+            100% { border-color: var(--orange-dark); box-shadow: 0 0 10px rgba(255, 102, 0, 0.2); }
+        }
+        
+        /* --------------------------------------------------
+         * Purple Pulse Animation (Deadline Card Border)
+         * -------------------------------------------------- */
+         @keyframes purple-pulse {
+            /* Distinct pulse effect for the Deadline Card border */
+            0% { border-color: var(--purple-main); box-shadow: 0 0 10px rgba(138, 43, 226, 0.2); }
+            50% { border-color: var(--violet-main); box-shadow: 0 0 20px rgba(138, 43, 226, 0.5); } 
+            100% { border-color: var(--purple-main); box-shadow: 0 0 10px rgba(138, 43, 226, 0.2); }
+        }
+
+        .fee-prize-card {
+            /* Base gold border color for the Fees card */
+            border-top: 8px solid var(--gold-bright) !important;
+        }
+        
+        /* DEADLINE CARD: Purple Pulse Animation */
+        .deadline-card {
+            position: relative;
+            /* Base border now PURPLE */
+            border: 4px solid var(--purple-main) !important; 
+            /* Animation now PURPLE PULSE */
+            animation: purple-pulse 4s infinite ease-in-out; 
+            transition: transform 0.3s ease, box-shadow 0.3s;
+        }
+
+        /* Hover style for the NEW purple pulsing deadline card */
+        .deadline-card:hover {
+            transform: translateY(-5px); 
+            background-color: #F3F4F6;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 15px var(--purple-main) !important; 
+        }
+
+        /* FEES CARD & TOTAL POOL: Gold Pulse Animation */
+        .fee-prize-card.prize-gold-border {
+             animation: gold-pulse 4s infinite ease-in-out; 
+        }
+
+        /* WINNING PRIZES CARD: Orange Pulse Animation (Used for Individual prizes card) */
+        .fee-prize-card.prize-orange-border {
+            border-top: 8px solid var(--orange-bright) !important;
+            animation: orange-pulse 4s infinite ease-in-out; 
+        }
+        
+        /* GUIDELINES CARD: Orange Pulse Animation (Used for the main guidelines box) */
+        .guidelines-card.card-orange-pulse {
+            /* Set an initial full border */
+            border: 4px solid var(--orange-dark) !important; /* Thick border */
+            border-top: 4px solid var(--orange-dark) !important; /* Ensure top border is thick too */
+            animation: orange-pulse 4s infinite ease-in-out; 
+        }
+
+        /* --------------------------------------------------
+         * Objectives & Themes: Rotating Colored Border Animation
+         * -------------------------------------------------- */
+        @keyframes rotating-border {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .theme-card {
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+        
+        /* The ::before pseudo-element creates the rotating gradient */
+        .theme-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            /* Default gradient colors (will be overridden by specific classes) */
+            background: conic-gradient(
+                from 0deg,
+                transparent 0%,
+                transparent 30%,
+                var(--border-color, var(--gold-bright)) 50%,
+                transparent 70%,
+                transparent 100%
+            );
+            z-index: -2;
+            animation: rotating-border 3s linear infinite; /* Increased speed and linear */
+        }
+
+        /* The ::after pseudo-element creates the inner light mask for the 'inner line' effect */
+        .theme-card::after {
+            content: '';
+            position: absolute;
+            top: 4px;       /* Pushed in 4px */
+            left: 4px;      /* Pushed in 4px */
+            right: 4px;     /* Pushed in 4px */
+            bottom: 4px;    /* Pushed in 4px. This creates the 4px thick animated border line */
+            background-color: var(--bg-card); /* Inner card background (Light Gray) */
+            border-radius: 0.75rem; /* Matches the card's rounded-xl */
+            z-index: -1;
+        }
+
+        /* Custom color definitions for each card */
+        .theme-card.theme-red { --border-color: var(--color-red); }
+        .theme-card.theme-cyan { --border-color: var(--purple-main); } 
+        .theme-card.theme-magenta { --border-color: var(--color-magenta); } /* UPDATED: Outline is purple */
+
+        /* Update ::before background to use the specific border color */
+        .theme-card.theme-red::before {
+            /* MODIFIED: Use purple-main for the rotating border (Outline as purple) */
+            background: conic-gradient(transparent 0%, transparent 30%, var(--purple-main) 50%, transparent 70%, transparent 100%);
+            animation: rotating-border 6s ease-in-out infinite; 
+        }
+        .theme-card.theme-cyan::before {
+            /* Use purple-main for the rotating border (Outline as purple) */
+            background: conic-gradient(transparent 0%, transparent 30%, var(--purple-main) 50%, transparent 70%, transparent 100%);
+            animation: rotating-border 6s ease-in-out infinite;
+        }
+        .theme-card.theme-magenta::before {
+            /* UPDATED: Use purple-main for the rotating border (Outline as purple) */
+            background: conic-gradient(transparent 0%, transparent 30%, var(--purple-main) 50%, transparent 70%, transparent 100%);
+            animation: rotating-border 6s ease-in-out infinite;
+        }
+
+        /* Ensure card content sits above the pseudo-elements */
+        .theme-card .content-wrapper {
+            position: relative;
+            z-index: 5;
+        }
+
+        /* --------------------------------------------------
+         * Light Mode Card Styles
+         * -------------------------------------------------- */
+        .info-card, .deadline-card, .prize-card, .step-card, .theme-card {
+            background-color: var(--bg-card); /* Light card background */
+            padding: 1.5rem;
+            border-radius: 1rem;
+            /* Adjusted shadow for 'lifted' look on white background */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); 
+            transition: transform 0.3s ease, background-color 0.3s, box-shadow 0.3s;
+        }
+
+        /* Standard Card Hover Effect */
+        .info-card:hover:not(.guidelines-card):not(.blue-accent-card), .step-card:hover, .theme-card:hover {
+            transform: translateY(-5px); 
+            background-color: #F3F4F6; /* Slightly darker light gray on hover */
+            /* Add BRIGHT gold glow on hover (Brilliant Touch Glow) */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 15px var(--gold-bright); 
+        }
+        
+        /* Special handling for cards with active animations/glows to prevent conflicting hover glow */
+        .fee-prize-card:hover, .guidelines-card:hover {
+             /* Use specific hover styles defined for these animated cards */
+            transform: translateY(-5px);
+        }
+        
+        /* Hover style for the NEW orange pulsing card */
+        .guidelines-card.card-orange-pulse:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 15px var(--orange-bright) !important; 
+        }
+        
+        /* Ensure the gold pulsing card retains its specific hover style */
+        .fee-prize-card.prize-gold-border:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 15px var(--gold-bright) !important; 
+        }
+        /* Ensure the orange prize card retains its specific hover style */
+        .fee-prize-card.prize-orange-border:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 15px var(--orange-bright) !important;
+        }
+        
+        /* Ensure the NEW purple pulsing deadline card retains its specific hover style */
+        .deadline-card:hover {
+            transform: translateY(-5px); 
+            background-color: #F3F4F6;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 15px var(--purple-main) !important; 
+        }
+        
+        /* Benefits Card (Blue Outline, Gold Text) */
+        .blue-accent-card {
+            /* Blue Border (Outline) */
+            border-left: 4px solid var(--blue-accent) !important;
+            transition: transform 0.3s ease, background-color 0.3s, box-shadow 0.3s;
+        }
+        
+        /* Blue Glow on Hover */
+        .blue-accent-card:hover {
+            background-color: #E0E7FF !important; /* Slightly colored light blue hover background */
+            /* Blue glow effect */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 15px var(--blue-accent) !important; 
+        }
+        /* Overriding the default gold icon/arrow for the benefits card. The benefit text now uses solid green */
+        .blue-accent-card .text-gold-bright,
+        .blue-accent-card .benefits-arrow {
+            /* This is now overridden by the new classes below if present */
+            color: var(--gold-bright) !important; 
+        }
+
+
+        /* Specific styling for the step numbers */
+        .step-number {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 3rem; 
+            height: 3rem;
+            border-radius: 9999px;
+            font-weight: 800; 
+            color: var(--bg-deep); /* Text is white inside the gold circle */
+            background: linear-gradient(45deg, var(--gold-bright), var(--gold-dark));
+            box-shadow: 0 4px 10px rgba(255, 215, 0, 0.4); 
+        }
+        
+        /* Since body text is now dark, we need to explicitly set the step number text to the new white (background) color for high contrast */
+        .step-number {
+            color: var(--bg-deep); /* Use the new white background color for the text inside the circle */
+        }
+
+
+        /* NEW: Step Card Border Styling */
+        .step-card {
+            border-bottom-width: 4px; /* Ensure thickness */
+            transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s;
+        }
+
+        .step-orange-border { border-bottom-color: var(--color-step-orange) !important; }
+        .step-blue-border { border-bottom-color: var(--color-step-blue) !important; }
+        .step-red-border { border-bottom-color: var(--red-normal) !important; } /* Use the new red-normal variable */
+        .step-purple-border { border-bottom-color: var(--color-step-purple) !important; }
+        
+        /* Step Card Hover Glows */
+        .step-card:hover {
+            transform: translateY(-5px); 
+            background-color: #F3F4F6; /* Slightly lighter on hover */
+        }
+        .step-orange-border:hover { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 15px var(--color-step-orange); }
+        .step-blue-border:hover { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 15px var(--color-step-blue); }
+        .step-red-border:hover { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 15px var(--red-normal); } /* Use the new red-normal variable for the hover glow */
+        .step-purple-border:hover { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 15px var(--color-step-purple); }
+
+
+        /* Styles for text in light mode cards */
+        .info-card h3, .step-card h3, .theme-card p {
+            color: var(--text-light); /* Dark text */
+        }
+        .info-card ul li, .prize-card ul li, .theme-card p {
+            color: var(--text-secondary); /* Secondary gray text */
+        }
+        .info-card p {
+             color: var(--text-secondary); /* Secondary gray text */
+        }
+
+        /* Styles for accordion content (steps and benefits) */
+        .step-content {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            padding-top: 0;
+            transition: max-height 0.5s ease-in-out, opacity 0.4s ease, padding-top 0.5s ease-in-out;
+        }
+
+        /* Active content styling */
+        .step-content.active {
+            max-height: 200px;
+            opacity: 1;
+            padding-top: 0.75rem;
+            border-top: 1px dashed var(--border-dark); /* Subtle light border */
+        }
+
+        .benefits-content {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            padding-top: 0;
+            transition: max-height 0.5s ease-in-out, opacity 0.4s ease, padding-top 0.5s ease-in-out;
+        }
+        .benefits-content.active {
+            max-height: 300px;
+            opacity: 1;
+            padding-top: 1rem;
+        }
+        
+        .rotate-arrow {
+            transform: rotate(180deg);
+        }
+        
+        /* --------------------------------------------------
+         * Header and Navigation (Light Mode)
+         * -------------------------------------------------- */
+        header {
+            background-color: var(--bg-deep); /* White header */
+            position: sticky; 
+            top: 0;
+            z-index: 20;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Lighter shadow */
+        }
+        .nav-links a {
+            color: var(--text-light) !important; /* Dark links */
+        }
+        /* Active Link */
+        .nav-links a.block.py-1.text-teal-600.font-bold.border-b-4.border-teal-600 {
+            color: var(--gold-dark) !important; /* Darker gold for visibility */
+            border-color: var(--gold-dark) !important;
+        }
+        /* Mobile Menu */
+        .menu-toggle span {
+            background: var(--gold-dark); /* Darker gold for visibility */
+        }
+        .nav-links {
+            background-color: var(--bg-deep); /* White mobile menu */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Lighter shadow */
+        }
+        
+        /* Mobile Nav Toggle improvements (no change needed here, colors updated above) */
+        .nav-links {
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+        }
+        .nav-links.active {
+            max-height: 500px;
+            opacity: 1;
+        }
+        .menu-toggle {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            height: 24px;
+            width: 30px;
+        }
+        .menu-toggle span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background: var(--gold-dark); /* Darker gold for visibility */
+            border-radius: 3px;
+            transition: all 0.3s linear;
+        }
+
+        /* Desktop Nav */
+        @media (min-width: 768px) {
+            .menu-toggle {
+                display: none;
+            }
+            .nav-links {
+                max-height: initial;
+                opacity: 1;
+                display: flex;
+            }
+        }
+
+
+        /* --------------------------------------------------
+         * Theme Card Colors (RETAINED ACCENTS, LIGHT BACKGROUND)
+         * -------------------------------------------------- */
+        .theme-card {
+            /* Removed fixed border-left style to use the rotating border */
+            border: 0; 
+            padding: 0; /* Padding is added inside the content-wrapper */
+            background-color: transparent !important; /* Make card transparent to show :before background */
+            box-shadow: none !important;
+        }
+
+        .theme-card .content-wrapper {
+             /* Apply the standard card background and padding here */
+            background-color: var(--bg-card); /* Light card background */
+            padding: 1.5rem;
+            border-radius: 0.75rem; /* Slightly smaller than parent for visual depth */
+            transition: transform 0.3s ease;
+        }
+        
+        /* Apply BRIGHT glow on hover to the content wrapper */
+        .theme-card:hover .content-wrapper {
+            transform: translateY(-5px); 
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 15px var(--gold-bright); /* Lighter shadow */
+        }
+        
+        /* --------------------------------------------------
+         * SPECIFIC FEE STYLING (Blue Accent)
+         * -------------------------------------------------- */
+        .fee-item {
+            /* Outer line/border is blue */
+            border: 2px solid var(--blue-accent); 
+            border-radius: 0.75rem; 
+            padding: 1rem; 
+            transition: all 0.3s ease;
+            margin-bottom: 1rem; /* Add spacing between rows */
+        }
+
+        .fee-item:hover {
+            /* Blue glow on hover */
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); 
+        }
+
+        .fee-label {
+            /* "Indian Teams" and "International Teams" text is blue */
+            color: var(--blue-accent) !important; 
+            font-weight: 700;
+        }
+        .fee-amount {
+            /* The amount itself remains dark text */
+            color: var(--text-light) !important; 
+        }
+        /* End Fee Styling */
+
+
+        /* --------------------------------------------------
+         * PRIZE CARD SPECIFIC BORDER COLORS
+         * -------------------------------------------------- */
+        /* Gold border for the Fees Card AND Total Prize Pool */
+        .prize-gold-border {
+            border-top-color: var(--gold-bright) !important;
+        }
+        
+        /* Orange border for the Winning Prizes Card */
+        .prize-orange-border {
+            border-top-color: var(--orange-bright) !important;
+        }
+        
+        /* START REGISTRATION BUTTON BLUE OUTLINE */
+        .btn-blue-outline {
+            background-color: var(--gold-dark) !important;
+            color: var(--text-light) !important; /* Dark text on gold button */
+            border: 4px solid var(--blue-accent) !important; /* Blue outline */
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); /* Subtle initial blue shadow */
+            transition: all 0.3s ease;
+        }
+
+        .btn-blue-outline:hover {
+            background-color: var(--gold-bright) !important;
+            color: var(--bg-deep) !important; /* White text on bright gold hover */
+            box-shadow: 0 0 25px var(--blue-accent) !important; /* Stronger blue glow on hover */
+            border-color: var(--blue-accent) !important;
+        }
+
+
+        /* Error/Confirmation Note Colors (Adjusted for light theme background) */
+        .prize-card .bg-red-50 {
+            background-color: #FEF2F2; /* Very light red background */
+            border-color: #FEE2E2;
+        }
+        .prize-card .text-red-700, .prize-card .text-red-600 {
+            color: #B91C1C !important; /* Dark red text */
+        }
+
+        /* Winning Prizes Card Sub-sections (Resetting generic styles) */
+        .text-yellow-900, .text-gray-900, .text-amber-900 { color: var(--text-light) !important; }
+
+        
+        /* Footer (Dark footer maintained for grounding) */
+        .site-footer {
+            background-color: #1F2937; /* Dark footer */
+            border-top: 3px solid var(--gold-dark);
+        }
+        .site-footer a {
+            color: var(--gold-bright) !important;
+        }
+        .site-footer a:hover {
+            color: var(--bg-deep) !important; /* White text on hover */
+        }
+
+    </style>
+</head>
+
+<body class="antialiased">
+    <header>
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="brand">
+                <a class="gradient-text text-3xl font-extrabold" href="index.html"><strong>EduAIthon</strong></a>
+            </div>
+            
+            <div class="menu-toggle md:hidden" id="menuToggle" aria-expanded="false" aria-controls="navLinks"> 
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            
+            <ul class="nav-links absolute md:relative top-16 left-0 right-0 md:top-auto md:flex space-y-2 md:space-y-0 md:space-x-8 bg-white md:bg-transparent shadow-lg md:shadow-none p-4 md:p-0 z-10" id="navLinks" role="menu"> 
+                <!-- Nav Links: Updated text-gray-600 to text-light to ensure proper color inheritance -->
+                <li><a href="index.html" class="block py-1 text-light hover:text-gold-bright" role="menuitem">Home</a></li>
+                <li><a href="about.html" class="block py-1 text-light hover:text-gold-bright" role="menuitem">About</a></li>
+                <li><a href="event.html" class="block py-1 text-light hover:text-gold-bright" role="menuitem">Event</a></li>
+                <li><a href="registration.html" class="block py-1 text-teal-600 font-bold border-b-4 border-teal-600 transition duration-300" role="menuitem">Registration</a></li> 
+                <li><a href="help.html" class="block py-1 text-light hover:text-gold-bright" role="menuitem">Help Desk</a></li>
+                <li><a href="gallery.html" class="block py-1 text-light hover:text-gold-bright" role="menuitem">Gallery</a></li>
+                <li><a href="faq.html" class="block py-1 text-light hover:text-gold-bright" role="menuitem">FAQ</a></li>
+                <li><a href="Coreteam.html" class="block py-1 text-light hover:text-gold-bright" role="menuitem">Core Team</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="flex-grow">
+        <div class="section-wrapper py-12 md:py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="section-header text-center mb-16"> 
+                    <!-- MODIFIED: "Join the Challenge" is solid purple -->
+                    <h1 class="text-solid-purple text-5xl md:text-7xl font-black mb-4 tracking-tight">Join the Challenge</h1> 
+                    <!-- Text color updated to secondary via CSS variable -->
+                    <p class="text-xl text-secondary font-semibold">Register your team and be a part of the future of engineering education.</p>
+                    
+                    <p class="mt-6 max-w-4xl mx-auto text-center text-secondary leading-relaxed"> The **EduAIthon 2026** is a premier 48-hour challenge designed to spur innovation in engineering education using **Artificial Intelligence**. We welcome diverse, interdisciplinary teams eager to solve real-world problems in this domain. By registering, your team secures a spot in this highly competitive event, providing networking opportunities, expert mentorship, and a platform to launch your project globally. Ensure your team meets all guidelines and submits the required documents before the final deadline.
+                    </p>
+                </div>
+
+                <div class="reg-layout grid grid-cols-1 lg:grid-cols-3 gap-10"> 
+                    <!-- Guidelines Card (NOW WITH ORANGE PULSE BORDER) -->
+                    <div class="guidelines-card info-card lg:col-span-2 space-y-8 card-orange-pulse">
+                        <div>
+                            <!-- MODIFIED: "Participation Guidelines" is now solid purple -->
+                            <h2 class="text-3xl font-extrabold text-solid-purple mb-4 border-b pb-2 border-border-dark">Participation Guidelines</h2> 
+                            <ul class="list-disc list-inside space-y-3 text-secondary pl-4"> 
+                                <li>Open to all **undergraduate and postgraduate** students.</li>
+                                <li>**Team Formation:** Teams must consist of **3–4 students**, preferably from different disciplines (interdisciplinary teams encouraged).</li>
+                                <li>Each team should be guided by one **faculty mentor** (can be in-person or online).</li>
+                                <li>Registration must be completed through the official EduAIthon portal.</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <!-- MODIFIED: "Required Submissions" is now solid orange -->
+                            <h2 class="text-3xl font-extrabold text-solid-orange mb-4 border-b pb-2 border-border-dark">Required Submissions</h2> 
+                            <p class="text-secondary">These documents are required during the online registration process. Ensure clarity and conciseness in your proposal.</p> 
+                            <ul class="list-disc list-inside space-y-3 text-secondary pl-4 mt-3">
+                                <li>**Problem Statement:** A concise description of the challenge your team will address (max **150 words**).</li>
+                                <li>**Initial Idea Outline:** A summary of your proposed solution and approach (max **300 words**).</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- BENEFITS CARD (NOW WITH BLUE OUTLINE AND GREEN TEXT) -->
+                        <div class="mt-8 info-card p-6 rounded-lg shadow-md cursor-pointer blue-accent-card" id="benefitsCard" role="button" tabindex="0"> 
+                            <div class="flex justify-between items-center" id="benefitsToggle" aria-expanded="false"> 
+                                <!-- MODIFIED: text-solid-green class applied to heading -->
+                                <h2 class="text-2xl font-extrabold text-solid-green flex items-center"> 
+                                    <!-- Icon class changed to benefits-icon-green to apply solid green color -->
+                                    <svg class="w-7 h-7 mr-3 benefits-icon-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                    Why You Should Register Your Team
+                                </h2>
+                                <!-- Arrow class changed to benefits-arrow-green to apply solid green color -->
+                                <svg class="benefits-arrow-green w-6 h-6 transition-transform duration-300 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+
+                            <div class="benefits-content">
+                                <ul class="list-disc list-inside space-y-2 text-secondary pl-4">
+                                    <li>**Guaranteed Slot:** Secure your team's place in the competitive 48-hour challenge.</li>
+                                    <li>**Expert Mentorship:** Get exclusive access to industry leaders and faculty for guidance during the event.</li>
+                                    <li>**Resource Access:** Unlock all necessary APIs, datasets, and technical documentation needed for the project.</li>
+                                    <li>**Certification & Swag:** Receive official participation certificates and event merchandise/swag.</li>
+                                    <li>**Pitch Platform:** Gain the opportunity to present your innovative project to a panel of investors and experts.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- FINAL SUBMISSION DEADLINE CARD (NOW WITH PURPLE PULSE) -->
+                    <div class="deadline-card flex flex-col justify-between items-center text-center p-8 lg:p-6"> 
+                        <div>
+                            <!-- MODIFIED: Changed text-gold-dark to text-solid-purple -->
+                            <h3 class="text-2xl font-extrabold text-solid-purple mb-3 uppercase tracking-wider">Final Submission Deadline</h3> 
+                            <!-- CHANGE: Removed gradient-text and used text-gray-900 for normal dark color -->
+                            <span class="date text-7xl font-black text-gray-900 block mb-4">30 Nov</span> 
+                            <!-- CHANGE: Removed text-solid-purple and used text-gray-900 for normal dark color -->
+                            <span class="text-5xl font-black text-gray-900 block mb-6">2025</span> 
+                            <p class="text-secondary mb-6 font-medium">Don't miss the chance to innovate. All required documents must be submitted online by this date.</p> 
+                        </div>
+                        <!-- BUTTON WITH BLUE OUTLINE -->
+                        <a href="login.html" class="btn primary btn-blue-outline font-extrabold py-4 px-10 rounded-xl transition duration-300 transform hover:scale-[1.03] w-full text-lg shadow-xl"> 
+                            🚀 Start Registration Now
+                        </a>
+                    </div>
+                </div>
+
+                <!-- OBJECTIVES & THEMES SECTION (WITH ROTATING BORDERS) -->
+                <div class="mt-20"> 
+                    <!-- MODIFIED: Removed the span/gradient-text wrapper and added text-solid-green class -->
+                    <h2 class="text-4xl font-black text-center mb-10 border-b-4 pb-2 border-border-dark objectives-header text-solid-green">Objectives & Themes</h2> 
+                    <p class="text-center max-w-4xl mx-auto text-secondary mb-12 text-lg">The challenge is structured around clear objectives, core themes, and well-defined judging criteria to ensure excellence and fairness.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8"> 
+                        
+                        <!-- Objective Card: PURPLE ROTATING BORDER (TEXT NOW SOLID ORANGE) -->
+                        <div class="theme-card theme-red rounded-xl p-0 shadow-lg"> 
+                            <div class="content-wrapper">
+                                <!-- MODIFIED: Changed text-solid-green to text-solid-orange. Updated icon color to orange. -->
+                                <h3 class="text-2xl font-bold mb-3 flex items-center text-solid-orange">
+                                    <i data-lucide="target" class="w-6 h-6 mr-3" style="color: var(--orange-bright) !important;"></i>
+                                    Objectives for Participants
+                                </h3>
+                                <!-- List uses the normal text-secondary color -->
+                                <ul class="list-disc list-inside space-y-2 text-secondary">
+                                    <li>**Innovation:** Develop novel, high-impact AI solutions for education.</li>
+                                    <li>**Feasibility:** Create functional prototypes within the 48-hour timeframe.</li>
+                                    <li>**Relevance:** Address critical, current challenges in engineering education.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Theme Card: CYAN ROTATING BORDER (TEXT NOW SOLID CYAN, OUTLINE REMAINS PURPLE) -->
+                        <div class="theme-card theme-cyan rounded-xl p-0 shadow-lg">
+                            <div class="content-wrapper">
+                                <!-- MODIFIED: Changed to solid cyan text, removed gradient-text (Used color-cyan) -->
+                                <h3 class="text-2xl font-bold mb-3 flex items-center text-solid-cyan">
+                                    <!-- Icon color changed to color-cyan -->
+                                    <i data-lucide="layout-grid" class="w-6 h-6 mr-3" style="color: var(--color-cyan) !important;"></i>
+                                    Core Themes
+                                </h3>
+                                <ul class="list-disc list-inside space-y-2 text-secondary">
+                                    <li>**Adaptive Systems:** Personalized learning and assessment tools.</li>
+                                    <li>**Ethical AI:** Bias mitigation and data privacy.</li>
+                                    <li>**Simulations:** AI-driven virtual labs and augmented learning.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Judging Card: PURPLE ROTATING BORDER (TEXT IS SOLID GREEN) -->
+                        <div class="theme-card theme-magenta rounded-xl p-0 shadow-lg">
+                            <div class="content-wrapper">
+                                <!-- MODIFIED: Removed gradient-text and added text-solid-green -->
+                                <h3 class="text-2xl font-bold mb-3 flex items-center text-solid-green">
+                                    <!-- Icon color changed to solid green -->
+                                    <i data-lucide="check-square" class="w-6 h-6 mr-3" style="color: var(--green-bright) !important;"></i>
+                                    Judging Criteria
+                                </h3>
+                                <ul class="list-disc list-inside space-y-2 text-secondary">
+                                    <li>**Technical Depth:** Quality of code and algorithms used (30%).</li>
+                                    <li>**Market Viability:** Potential for real-world impact (30%).</li>
+                                    <li>**Presentation:** Clarity and persuasiveness of the pitch (40%).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END OBJECTIVES & THEMES SECTION -->
+
+                <!-- HACKATHON THEMES SECTION -->
+                <div class="mt-20"> 
+                    <!-- MODIFIED: Removed the gradient span wrapper and added text-solid-purple class for normal color -->
+                    <h2 class="text-4xl font-black text-center mb-10 border-b-4 pb-2 border-border-dark text-solid-purple">Hackathon Themes & Focus Areas</h2> 
+                    <p class="text-center max-w-4xl mx-auto text-secondary mb-12 text-lg">Your team's submission should align with one of these critical domains in the future of AI-powered engineering education. Choose a track that matches your team's expertise and passion.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"> 
+                        <!-- Theme 1: Personalized Learning (Red Accent) -->
+                        <div class="theme-card info-card theme-1" style="border-left-color: #ef4444; border-left-width: 5px;">
+                            <i data-lucide="brain-circuit" class="w-10 h-10 mb-4 text-red-600" style="color: #ef4444"></i>
+                            <h3 class="text-xl font-bold mb-2">Personalized Learning Systems</h3>
+                            <p class="text-sm text-secondary">Develop adaptive AI tutors, assessment engines, and dynamic curriculum generators that cater to individual student pace and style.</p>
+                        </div>
+
+                        <!-- Theme 2: Data-Driven Pedagogy (Orange Accent) -->
+                        <div class="theme-card info-card theme-2" style="border-left-color: #f97316; border-left-width: 5px;">
+                            <i data-lucide="bar-chart-3" class="w-10 h-10 mb-4 text-orange-600" style="color: #f97316"></i>
+                            <h3 class="text-xl font-bold mb-2">Data-Driven Pedagogy</h3>
+                            <p class="text-sm text-secondary">Focus on Machine Learning models that analyze vast educational datasets to provide actionable insights for faculty and administrators, optimizing instructional design.</p>
+                        </div>
+
+                        <!-- Theme 3: Accessibility & Inclusion (Blue Accent) -->
+                        <div class="theme-card info-card theme-3" style="border-left-color: #3b82f6; border-left-width: 5px;">
+                            <i data-lucide="hand-heart" class="w-10 h-10 mb-4 text-blue-600" style="color: #3b82f6"></i>
+                            <h3 class="text-xl font-bold mb-2">Accessibility & Inclusion</h3>
+                            <p class="text-sm text-secondary">Innovate AI solutions that remove educational barriers, supporting students with cognitive, physical, or language challenges through assistive technology.</p>
+                        </div>
+
+                        <!-- Theme 4: Ethical AI & Security (Violet Accent) -->
+                        <div class="theme-card info-card theme-4" style="border-left-color: #8b5cf6; border-left-width: 5px;">
+                            <i data-lucide="lock-keyhole" class="w-10 h-10 mb-4 text-violet-600" style="color: #8b5cf6"></i>
+                            <h3 class="text-xl font-bold mb-2">Ethical AI & Security</h3>
+                            <p class="text-sm text-secondary">Create robust frameworks and tools to ensure the responsible deployment of AI, focusing on data privacy, fairness, bias mitigation, and transparency in educational systems.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- END HACKATHON THEMES SECTION -->
+
+                <div class="mt-20"> 
+                    <!-- MODIFIED: Removed the span/gradient-text wrapper and added text-solid-purple class for normal color -->
+                    <h2 class="text-4xl font-black text-center mb-10 reg-guide-header text-solid-purple">Your 4-Step Registration Guide</h2> 
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"> 
+                        
+                        <!-- STEP 1: ASSEMBLE (ORANGE Border, SOLID ORANGE Text) -->
+                        <div class="step-card text-center p-6 border-b-4 step-orange-border cursor-pointer" role="button" tabindex="0"> 
+                            <div class="flex flex-col items-center">
+                                <div class="step-number mx-auto mb-4">1</div>
+                                <!-- MODIFIED: Replaced text-solid-purple with text-normal-orange class for orange color -->
+                                <h3 class="text-xl font-bold text-normal-orange mb-2 flex items-center justify-center"> Assemble Your Team 
+                                    <!-- MODIFIED: Replaced text-solid-purple with text-normal-orange for the arrow color -->
+                                    <svg class="step-arrow w-4 h-4 ml-2 transition-transform duration-300 transform text-normal-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </h3>
+                            </div>
+                            <div class="step-content">
+                                <p class="text-sm text-secondary pt-3">Form a team of **3 or 4 students**. Select a faculty mentor and decide on your team's name and primary contact. Remember, interdisciplinary teams often yield the most innovative results!</p>
+                            </div>
+                        </div>
+
+                        <!-- STEP 2: SUBMIT (BLUE Border, SOLID BLUE Text) -->
+                        <div class="step-card text-center p-6 border-b-4 step-blue-border cursor-pointer" role="button" tabindex="0">
+                            <div class="flex flex-col items-center">
+                                <div class="step-number mx-auto mb-4">2</div>
+                                <!-- MODIFIED: Uses text-solid-blue class for normal blue color -->
+                                <h3 class="text-xl font-bold text-solid-blue mb-2 flex items-center justify-center">
+                                    Submit Idea & Register
+                                    <!-- MODIFIED: Uses text-solid-blue for the arrow color -->
+                                    <svg class="step-arrow w-4 h-4 ml-2 transition-transform duration-300 transform text-solid-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </h3>
+                            </div>
+                            <div class="step-content">
+                                <p class="text-sm text-secondary pt-3">Complete the online form with all team member and mentor details. This includes uploading your initial **Problem Statement** and the detailed **Idea Outline** required for evaluation.</p>
+                            </div>
+                        </div>
+
+                        <!-- STEP 3: PAYMENT (RED Border, SOLID RED Text) -->
+                        <div class="step-card text-center p-6 border-b-4 step-red-border cursor-pointer" role="button" tabindex="0">
+                            <div class="flex flex-col items-center">
+                                <div class="step-number mx-auto mb-4">3</div>
+                                <!-- MODIFIED: Replaced gradient-text with text-solid-red class for normal red color -->
+                                <h3 class="text-xl font-bold text-solid-red mb-2 flex items-center justify-center">
+                                    Complete Payment
+                                    <!-- MODIFIED: Replaced text-gold-bright with text-solid-red for the arrow color -->
+                                    <svg class="step-arrow w-4 h-4 ml-2 transition-transform duration-300 transform text-solid-red" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </h3>
+                            </div>
+                            <div class="step-content">
+                                <p class="text-sm text-secondary pt-3">Proceed to the secure payment gateway. Payment of **₹1500 (or $50 USD)** per team is mandatory to finalize your registration and reserve your hackathon slot.</p>
+                            </div>
+                        </div>
+
+                        <!-- STEP 4: CONFIRMATION (PURPLE Border, SOLID PURPLE Text) -->
+                        <div class="step-card text-center p-6 border-b-4 step-purple-border cursor-pointer" role="button" tabindex="0">
+                            <div class="flex flex-col items-center">
+                                <div class="step-number mx-auto mb-4">4</div>
+                                <!-- MODIFIED: H3 now uses text-solid-purple class, removing gradient-text -->
+                                <h3 class="text-xl font-bold text-solid-purple mb-2 flex items-center justify-center">
+                                    Receive Confirmation
+                                    <!-- MODIFIED: Arrow now uses text-solid-purple -->
+                                    <svg class="step-arrow w-4 h-4 ml-2 transition-transform duration-300 transform text-solid-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </h3>
+                            </div>
+                            <div class="step-content">
+                                <p class="text-sm text-secondary pt-3">The designated team lead will receive a **final confirmation email** containing project guidelines, links to collaboration resources, and the event schedule.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-20 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- FEES CARD (Gold Pulse Animation) -->
+                    <div class="prize-card fee-prize-card prize-gold-border p-6 border-t-8 shadow-xl hover:shadow-2xl"> 
+                        <h2 class="fee-card-headline text-3xl font-extrabold mb-6 flex items-center"> 
+                            <!-- MODIFIED: Applied text-solid-purple to the icon -->
+                            <svg class="w-8 h-8 mr-3 text-solid-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V4m0 12v4m-5-2h10a2 2 0 002-2V8a2 2 0 00-2-2H7a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <!-- MODIFIED: Applied text-solid-purple to the text span -->
+                            <span class="text-solid-purple">Registration & Team Fees</span>
+                        </h2>
+                        <ul class="space-y-4 text-light"> 
+                            <!-- Indian Teams Fee Row (Blue Accent) -->
+                            <li class="fee-item flex justify-between items-center"> 
+                                <span class="fee-label text-lg">Indian Teams:</span>
+                                <span class="fee-amount font-black text-2xl">₹ 1500 per team</span> 
+                            </li>
+                            <!-- International Teams Fee Row (Blue Accent) -->
+                            <li class="fee-item flex justify-between items-center">
+                                <span class="fee-label text-lg">International Teams:</span>
+                                <span class="fee-amount font-black text-2xl">$ 50 USD per team</span>
+                            </li>
+                            
+                            <li class="pt-4 border-t border-border-dark">
+                                <span class="font-extrabold text-light block mb-2 text-base">What Your Team Fee Covers:</span>
+                                <ul class="list-disc list-inside space-y-1 text-sm text-secondary ml-4">
+                                    <li>Full access to all pre-hackathon **workshops** and technical sessions.</li>
+                                    <li>Official EduAIthon starter kit and necessary **hackathon materials**.</li>
+                                    <li>Official participation and **merit certificates** for all team members.</li>
+                                    <li>Exclusive access to **mentorship slots** with industry experts during the event.</li>
+                                    </ul>
+                            </li>
+
+                            <li class="pt-6 border-t border-red-100 bg-red-50 p-3 rounded-lg"> 
+                                <span class="font-extrabold text-red-700 block mb-1 text-sm">*Important Note on Confirmation:</span>
+                                <p class="text-sm text-red-600">Registration is only confirmed upon successful fee payment through the official portal gateway. Payments are **non-refundable** once the team is confirmed.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- END FEES CARD -->
+
+                    <!-- WINNING PRIZES CARD (Orange Pulse Animation & Purple Text) -->
+                    <div class="prize-card fee-prize-card prize-orange-border p-6 border-t-8 shadow-xl hover:shadow-2xl"> 
+                        <h2 class="winning-prizes-headline text-3xl font-extrabold mb-6 flex items-center">
+                            <!-- Icon is now solid purple text -->
+                            <svg class="w-8 h-8 mr-3 text-solid-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.197L12 1.5l.951.697L18.4 6.518l.758.583.187.143-5.26 5.26 1.77 1.77L21 9.422V20a2 2 0 01-2 2H5a2 2 0 01-2-2V9.422l6.814-6.225a1 1 0 011.235 0zM12 18a6 6 0 100-12 6 6 0 000 12z"></path></svg>
+                            <!-- Text is now solid purple text (removed gradient-text) -->
+                            <span class="text-solid-purple">Winning Prizes</span>
+                        </h2>
+                        <div class="space-y-4"> 
+                            <!-- Prize amounts still use the orange gradient text class -->
+                            <!-- Note: Tailwind classes like bg-yellow-100, text-yellow-700 are now visible on a white background -->
+                            <div class="bg-yellow-100 p-4 rounded-xl flex justify-between items-center border border-yellow-400"> 
+                                <span class="text-xl font-extrabold text-yellow-700">🥇 1st Place</span>
+                                <span class="text-3xl font-black prize-amount-orange">₹ 50,000</span> 
+                            </div>
+                            <div class="bg-gray-200 p-4 rounded-xl flex justify-between items-center border border-gray-400">
+                                <span class="text-xl font-extrabold text-gray-700">🥈 2nd Place</span>
+                                <span class="text-3xl font-black prize-amount-orange">₹ 30,000</span>
+                            </div>
+                            <div class="bg-amber-100 p-4 rounded-xl flex justify-between items-center border border-amber-400">
+                                <span class="text-xl font-extrabold text-amber-700">🥉 3rd Place</span>
+                                <span class="text-3xl font-black prize-amount-orange">₹ 15,000</span>
+                            </div>
+                            <p class="pt-4 text-sm text-secondary font-medium">In addition to cash prizes, all finalists receive a merit certificate, exclusive swag, and post-hackathon mentorship opportunities.</p> 
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NEW TOTAL PRIZE BOX (Gold Pulse & Solid Gold Text) -->
+                <div class="mt-16 max-w-2xl mx-auto">
+                    <div class="fee-prize-card prize-gold-border p-8 rounded-xl text-center shadow-2xl">
+                        <!-- MODIFIED: Added text-solid-gold class -->
+                        <h2 class="text-3xl sm:text-4xl font-extrabold uppercase mb-3 text-solid-gold">
+                            Total Cash Prize Pool
+                        </h2>
+                        <!-- MODIFIED: Removed prize-amount-gold class and added text-solid-gold -->
+                        <div id="total-winnings-pool-gold" class="text-6xl sm:text-7xl font-black tracking-tighter text-solid-gold">
+                            ₹ 95,000
+                        </div>
+                        <p class="text-secondary mt-2">The grand total of cash prizes to be awarded to the top three teams.</p>
+                    </div>
+                </div>
+                <!-- END NEW TOTAL PRIZE BOX -->
+
+                </div>
+        </div>
+    </main>
+
+    <footer class="site-footer bg-bg-deep mt-16 py-8 border-t border-gold-dark"> 
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-secondary text-sm font-medium"> 
+            <p>© IUCEE – **EduAIthon 2026** | 
+                <a href="help.html" class="hover:text-gold-bright transition duration-200">Contact Us</a> | 
+                <a href="login.html" class="hover:text-gold-bright transition duration-200">Portal Login</a> | 
+                <a href="#" class="hover:text-gold-bright transition duration-200">Terms & Privacy</a>
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // JavaScript for mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            // IMPROVEMENT: Update ARIA attributes for accessibility
+            const isExpanded = navLinks.classList.contains('active');
+            menuToggle.setAttribute('aria-expanded', isExpanded);
+        });
+
+        // --- ACCORDION LOGIC ---
+
+        // 1. Step-by-Step Accordion
+        const stepCards = document.querySelectorAll('.step-card');
+
+        stepCards.forEach(card => {
+            card.addEventListener('click', () => {
+                // Get elements inside the clicked card
+                const content = card.querySelector('.step-content');
+                const arrow = card.querySelector('.step-arrow');
+
+                // Check if this step is already active
+                const isActive = content.classList.contains('active');
+
+                // Close all active steps first
+                stepCards.forEach(otherCard => {
+                    const otherContent = otherCard.querySelector('.step-content');
+                    const otherArrow = otherCard.querySelector('.step-arrow');
+                    
+                    if (otherContent && otherArrow) {
+                        otherContent.classList.remove('active');
+                        otherArrow.classList.remove('rotate-arrow');
+                    }
+                });
+
+                // Toggle the clicked step (open if closed, close if already open)
+                if (!isActive) {
+                    content.classList.add('active');
+                    arrow.classList.add('rotate-arrow');
+                }
+            });
+        });
+
+
+        // 2. Benefits Accordion
+        const benefitsCard = document.getElementById('benefitsCard');
+
+        if (benefitsCard) {
+            benefitsCard.addEventListener('click', () => {
+                const content = benefitsCard.querySelector('.benefits-content');
+                const arrow = benefitsCard.querySelector('.benefits-arrow-green'); // Targeting the specific arrow
+                
+                // Toggle active class on content and rotate the arrow
+                content.classList.toggle('active');
+                arrow.classList.toggle('rotate-arrow');
+                
+                // IMPROVEMENT: Update ARIA attributes for accessibility
+                const isExpanded = content.classList.contains('active');
+                benefitsCard.querySelector('#benefitsToggle').setAttribute('aria-expanded', isExpanded);
+            });
+        }
+    </script>
+</body>
+
+</html>

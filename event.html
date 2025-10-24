@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Event Details — EduAIthon 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* --------------------------------------------------
+         * White, Purple, and Violet Unified Palette (LIGHT MODE)
+         * -------------------------------------------------- */
+        :root {
+            /* NEW LIGHT MODE BASE COLORS */
+            --bg-light: #F9F9F9;        /* Near White (Main Background) */
+            --text-dark: #1A1A1A;       /* Dark Text (Main text color) */
+            --card-light-bg: #FFFFFF;     /* Pure White Card Background */
+            --card-border-light: #E0E0E0; /* Light Grey Border */
+            
+            /* PURPLE/VIOLET ACCENT COLORS (for contrast) */
+            --main-bright-accent: #6A0DAD;   /* Deep Violet (Primary Accent) */
+            --main-light-accent: #9D59D3;    /* Mid Purple (Secondary Accent) */
+            --main-shadow-detail: #D4C1E7;   /* Light Lavender (Shadow/Detail) */
+            
+            /* Animation & Shadow */
+            --glow-touch-light: rgba(106, 13, 173, 0.15); /* Subtle Purple on Light */
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            
+            /* Theme Colors for Objectives & Themes Section */
+            --theme-orange-bright: #F97316;     
+            --theme-orange-accent: #C2410C;     
+            --theme-ruby-bright: #E0115F;     
+            --theme-ruby-accent: #9A0642;     
+            --theme-yellow-bright: #FACC15;  
+            --theme-yellow-accent: #A16207;  
+            
+            /* NEW GREEN COLOR FOR EXPANDED AGENDA ITEMS */
+            --expanded-green-bg: #E6F7E8; 
+            --expanded-green-border: #B0D9B1; 
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background: var(--bg-light); 
+            color: var(--text-dark); 
+        }
+
+        .container {
+            width: 85%;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        .section-wrapper {
+            padding: 60px 0;
+            background-color: var(--bg-light); 
+        }
+
+        /* --------------------------------------------------
+         * Global Animations & Typography
+         * -------------------------------------------------- */
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .section-header p {
+            color: #555555; /* Dark grey for body text contrast */
+        }
+
+        /* Title Gradient Animation (Purple/Violet Shimmer on White BG) */
+        .gradient-text {
+            /* Uses purple/violet gradient for contrast */
+            background: linear-gradient(90deg, var(--main-bright-accent), var(--main-light-accent), var(--main-bright-accent));
+            background-size: 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientMove 6s infinite alternate ease-in-out;
+            font-weight: 800;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        
+        /* Keyframes for the continuous rotating border effect */
+        @keyframes rotating-border {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        /* Keyframes for the subtle breathing glow (Prizes) */
+        @keyframes breathingVioletGlow {
+            0% { box-shadow: 0 0 10px rgba(106, 13, 173, 0.05); } 
+            50% { box-shadow: 0 0 15px var(--glow-touch-light); } 
+            100% { box-shadow: 0 0 10px rgba(106, 13, 173, 0.05); }
+        }
+
+
+        /* --------------------------------------------------
+         * Header and Navigation
+         * -------------------------------------------------- */
+        header {
+            background: var(--card-light-bg);
+            padding: 18px 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 4px 12px var(--shadow-light);
+            /* Purple accent border */
+            border-bottom: 2px solid var(--main-light-accent);
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav ul {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+            margin: 0;
+        }
+        nav a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        /* Active link color is Deep Violet */
+        nav a.active, nav a:hover { color: var(--main-bright-accent); transform: translateY(-2px); }
+        nav a::after {
+            content: "";
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            /* Purple gradient for hover effect */
+            background: linear-gradient(90deg, var(--main-light-accent), var(--main-bright-accent));
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+        nav a:hover::after { width: 100%; }
+        .brand a {
+            font-size: 1.9rem;
+            font-weight: 900;
+            text-decoration: none;
+        }
+
+
+        /* --------------------------------------------------
+         * 1. EVENT DETAILS - TIMELINE (White/Purple Accents on Light BG)
+         * -------------------------------------------------- */
+        
+        /* Keyframes for the Pulsing Violet Glow */
+        @keyframes pulseVioletGlow {
+            0% { box-shadow: 0 0 0 0 rgba(106, 13, 173, 0.5); } 
+            70% { box-shadow: 0 0 0 15px rgba(106, 13, 173, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(106, 13, 173, 0); }
+        }
+
+        .timeline {
+            position: relative;
+            margin: 50px auto;
+            padding: 40px 0;
+            width: 100%;
+        }
+        
+        /* The Static Light Vertical Line */
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            /* Simple light grey line */
+            background: var(--card-border-light); 
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -1.5px;
+            z-index: 0;
+        }
+        
+        .timeline-container {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+        .timeline-container.left { left: 0; }
+        .timeline-container.right { left: 50%; }
+        
+        /* The pulsing circle marker */
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -14px;
+            background-color: var(--card-light-bg); 
+            /* Deep Violet border */
+            border: 4px solid var(--main-bright-accent); 
+            top: 25px;
+            border-radius: 50%;
+            z-index: 1;
+            /* Light shadow */
+            box-shadow: 0 0 8px var(--main-shadow-detail); 
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-container.right::after { left: -12px; }
+        
+        /* The main content card - now light mode */
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: var(--card-light-bg); 
+            color: var(--text-dark); 
+            position: relative;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px var(--shadow-light); 
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease;
+            cursor: pointer;
+            border: 1px solid var(--card-border-light); 
+        }
+        
+        /* Hover/Touch Effect: Lift + Strong Purple/Violet Glow */
+        .timeline-container:hover .timeline-content {
+            transform: translateY(-8px); 
+            /* Deep Violet border */
+            border-color: var(--main-bright-accent);
+            /* BRIGHTER TOUCH GLOW */
+            box-shadow: 0 0 30px var(--glow-touch-light), 0 15px 30px var(--shadow-light);
+        }
+
+        .timeline-container:hover::after {
+            /* Deep Violet colors on hover */
+            border-color: var(--main-light-accent); 
+            background-color: var(--main-bright-accent); 
+            animation: pulseVioletGlow 1.8s infinite; 
+        }
+        
+        .timeline-content h2 { 
+            margin-top: 0; 
+            /* Deep violet color */
+            color: var(--main-bright-accent); 
+            font-weight: 700;
+        }
+        .timeline-content p { color: #555555; } 
+        .timeline-content .date { 
+            font-weight: 700; 
+            /* Mid purple color */
+            color: var(--main-light-accent); 
+            margin-bottom: 10px; 
+            display: block; 
+        }
+        
+        /* --------------------------------------------------
+         * 3. Objectives & Themes (Multi-Color Rotating Border)
+         * -------------------------------------------------- */
+        #theme-section {
+            background-color: var(--bg-light); 
+            color: var(--text-dark); 
+            padding: 60px 0;
+        }
+        
+        #theme-section .section-header p {
+            color: #555555; 
+        }
+        
+        /* --- Rotating Border Animation CSS --- */
+        #theme-section .card {
+            background: var(--card-light-bg);
+            border-top: none; 
+            position: relative;
+            overflow: hidden; 
+            box-shadow: 0 4px 10px var(--shadow-light);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-radius: 12px;
+            z-index: 1; 
+        }
+        
+        /* Common ::before properties for the rotating line */
+        #theme-section .card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: -1; 
+            width: 200%;
+            height: 200%;
+            animation: rotating-border 6s linear infinite; /* Changed to linear for smooth continuous rotation */
+        }
+
+        /* 1. Objectives (theme-red) is now ORANGE */
+        .theme-red::before { 
+            background: conic-gradient(var(--theme-orange-bright) 0deg, var(--theme-orange-accent) 60deg, transparent 120deg, transparent 240deg, var(--theme-orange-bright) 360deg);
+        }
+
+        /* 2. Core Themes (theme-cyan) is now RUBY/DEEP RED */
+        .theme-cyan::before {
+            background: conic-gradient(var(--theme-ruby-bright) 0deg, var(--theme-ruby-accent) 60deg, transparent 120deg, transparent 240deg, var(--theme-ruby-bright) 360deg);
+        }
+        
+        /* 3. Judging Criteria (theme-magenta) is now YELLOW */
+        .theme-magenta::before {
+            background: conic-gradient(var(--theme-yellow-bright) 0deg, var(--theme-yellow-accent) 60deg, transparent 120deg, transparent 240deg, var(--theme-yellow-bright) 360deg);
+        }
+
+
+        #theme-section .card::after {
+            content: '';
+            position: absolute;
+            /* Inset is 4px to make the animated border visibly thick and defined */
+            inset: 4px; 
+            background: var(--card-light-bg);
+            /* Adjusted radius to match 12px card radius minus 4px inset = 8px */
+            border-radius: 8px; 
+            z-index: 0; 
+        }
+
+        /* Hover/Touch Effect: Simple lift + Subtle Glow */
+        #theme-section .card:hover {
+            transform: translateY(-5px); 
+            /* Subtle TOUCH GLOW (Violet) */
+            box-shadow: 0 0 25px var(--glow-touch-light), 0 15px 30px var(--shadow-light);
+        }
+
+        /* Ensure content is readable above the layers */
+        .accordion-header, .accordion-content {
+            position: relative;
+            z-index: 2; 
+        }
+
+        /* Styling for the header (static content) */
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            /* Header text is Deep Violet */
+            color: var(--main-bright-accent) !important; 
+            padding: 0;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+            /* Light lavender shadow line */
+            border-bottom: 2px solid var(--main-shadow-detail);
+            padding-bottom: 10px;
+        }
+
+        .accordion-icon {
+            font-size: 0.8rem;
+            color: #555555; 
+            font-weight: 400;
+        }
+
+        /* Content is always visible */
+        .accordion-content {
+            background-color: var(--card-light-bg); 
+            color: var(--text-dark);
+            padding-top: 15px; 
+        }
+
+        .accordion-content li {
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: #333333;
+            list-style: disc;
+            margin-left: 20px;
+        }
+        
+        /* --------------------------------------------------
+         * 2. Detailed Schedule/Agenda & 4. Prizes 
+         * -------------------------------------------------- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .card {
+            background: var(--card-light-bg); 
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px var(--shadow-light);
+            /* Deep Violet top border */
+            border-top: 4px solid var(--main-bright-accent); 
+            transition: all 0.3s ease;
+            color: var(--text-dark); 
+            border: 1px solid var(--card-border-light); 
+        }
+        
+        /* Generic card hover (used by Agenda/Prizes/Speakers) */
+        .card:hover {
+            transform: translateY(-5px);
+            /* Subtle TOUCH GLOW (Violet) */
+            box-shadow: 0 0 25px var(--glow-touch-light), 0 8px 25px var(--shadow-light);
+        }
+        
+        /* Special style for Prize cards to enable the continuous glow */
+        .prize-card {
+            /* Light base glow */
+            box-shadow: 0 0 10px rgba(106, 13, 173, 0.05); 
+            animation: breathingVioletGlow 3s infinite alternate ease-in-out; 
+            cursor: default !important; 
+        }
+        .prize-card:hover {
+             /* BRIGHTER TOUCH GLOW (Violet) */
+             transform: translateY(-5px);
+             box-shadow: 0 0 20px var(--glow-touch-light), 0 8px 25px var(--shadow-light);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--card-border-light); 
+            /* Purple text gradient */
+            background: linear-gradient(90deg, var(--main-light-accent), var(--main-bright-accent));
+            background-size: 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientMove 4s infinite alternate ease-in-out; 
+            font-weight: 700;
+        }
+
+        .schedule-time {
+            font-weight: 700;
+            /* Mid purple color */
+            color: var(--main-light-accent);
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        .schedule-item {
+            display: flex;
+            flex-wrap: wrap; 
+            padding: 10px 0;
+            border-bottom: 1px solid var(--card-border-light); 
+            align-items: center; /* Changed from flex-start to center for icon alignment */
+            cursor: pointer; 
+            transition: background-color 0.2s ease;
+            position: relative; 
+        }
+        .schedule-item-content {
+            display: flex;
+            align-items: flex-start;
+            flex-grow: 1; /* Allows content to take up available space */
+        }
+        .schedule-item:hover {
+            background-color: #F0F0F0; 
+            border-radius: 4px;
+        }
+        .schedule-details {
+            flex-grow: 1;
+        }
+        .schedule-details strong {
+            display: block;
+            color: var(--text-dark); 
+            font-weight: 600;
+        }
+        .schedule-details small {
+            color: #555555; 
+        }
+        .schedule-toggle-icon {
+            margin-left: auto;
+            font-size: 1.5rem;
+            line-height: 1;
+            color: var(--main-bright-accent);
+            transition: transform 0.3s ease;
+            transform: rotate(0deg); /* Start as a plus sign */
+        }
+        .schedule-item.expanded .schedule-toggle-icon {
+            transform: rotate(45deg); /* Rotate to form an 'X' */
+        }
+
+        .inline-details {
+            flex-basis: 100%; 
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out, opacity 0.3s ease-in;
+            padding: 0; 
+            opacity: 0;
+            color: var(--text-dark); 
+        }
+        
+        /* MODIFIED: Green Background for Expanded Item */
+        .schedule-item.expanded .inline-details {
+            max-height: 500px; 
+            padding: 15px;
+            opacity: 1;
+            margin-top: 10px;
+            /* Light green background for expansion */
+            background-color: var(--expanded-green-bg); 
+            border: 1px solid var(--expanded-green-border);
+        }
+
+        .prize-card-title {
+            /* Deep violet color */
+            color: var(--main-bright-accent);
+            /* Mid purple border */
+            border-top: 4px solid var(--main-light-accent); 
+            padding-top: 15px;
+            margin-top: -15px; 
+            font-size: 1.4rem;
+            transition: color 0.3s;
+            cursor: default; 
+            display: block;
+            font-weight: 800;
+        }
+        .prize-details-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0 0 0;
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 10px; 
+        }
+
+        .prize-details-list li {
+            font-size: 0.9rem; 
+            /* Light purple background */
+            background-color: #F0E8F5; 
+            color: var(--text-dark);
+            padding: 8px 12px;
+            border-radius: 6px;
+            /* Deep Violet border */
+            border: 1px solid var(--main-shadow-detail); 
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+
+        /* --------------------------------------------------
+         * 5. Speakers/Mentors Section (NEW CSS)
+         * -------------------------------------------------- */
+        .speaker-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 30px 20px;
+            /* Keep base card styles */
+        }
+
+        .speaker-card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            /* Purple ring border */
+            border: 5px solid var(--main-light-accent);
+            box-shadow: 0 0 0 8px #FFFFFF, 0 5px 15px var(--shadow-light);
+        }
+
+        .speaker-card h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 5px 0 2px 0;
+            color: var(--main-bright-accent);
+        }
+
+        .speaker-card .role {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--main-light-accent);
+            margin-bottom: 10px;
+        }
+
+        .speaker-card p {
+            font-size: 0.9rem;
+            color: #555555;
+            line-height: 1.5;
+        }
+        
+        .site-footer {
+            background: var(--card-light-bg);
+            color: var(--text-dark);
+            text-align: center;
+            padding: 25px 0;
+            margin-top: 0;
+            box-shadow: 0 -4px 12px var(--shadow-light);
+            /* Deep Violet top border */
+            border-top: 3px solid var(--main-bright-accent);
+        }
+        .site-footer a { 
+            /* Deep Violet links */
+            color: var(--main-bright-accent); 
+            text-decoration: none; 
+            font-weight: 500; 
+            transition: color 0.3s ease; 
+        }
+        .site-footer a:hover { color: var(--text-dark); text-decoration: underline; }
+
+        /* Responsive Styles */
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            z-index: 20;
+            font-size: 24px;
+            color: var(--main-bright-accent);
+            padding: 5px 10px;
+        }
+        
+        @media screen and (max-width: 768px) {
+          .timeline::after { left: 31px; }
+          .timeline-container { width: 100%; padding-left: 70px; padding-right: 25px; }
+          .timeline-container.right { left: 0%; }
+          .timeline-container::after { left: 18px; }
+          .container { width: 95%; }
+          .section-header h1 { font-size: 2.2rem; }
+          .schedule-time { flex-basis: 100%; margin-bottom: 5px; }
+          
+          /* Mobile Menu Styles (Adjusted height for 5 links) */
+          .nav-links {
+              position: absolute;
+              top: 80px; /* Below the header */
+              left: 0;
+              right: 0;
+              flex-direction: column;
+              background: var(--card-light-bg);
+              box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1);
+              padding: 0; /* Adjusted padding */
+              /* Start collapsed */
+              height: 0;
+              overflow: hidden;
+              transition: height 0.4s ease-in-out;
+          }
+          .nav-links.nav-open {
+              height: 250px; /* Estimated height for 5 items */
+              padding: 10px 0;
+          }
+          .nav-links li {
+              width: 100%;
+              text-align: center;
+              padding: 10px 0;
+          }
+
+          .menu-toggle {
+              display: block; /* Show hamburger icon */
+          }
+          
+          .speaker-card img {
+              width: 100px;
+              height: 100px;
+          }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="container nav">
+            <div class="brand">
+                <a class="gradient-text" href="index.html"><strong>EduAIthon</strong></a>
+            </div>
+            <!-- Hamburger Menu Toggle for Mobile -->
+            <button class="menu-toggle" aria-controls="nav-links" aria-expanded="false" id="menu-toggle-btn">
+                &#x2261;
+            </button>
+            <!-- Navigation Links Updated to include Speakers and adjusted order -->
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#timeline">Timeline</a></li>
+                <li><a href="#agenda">Agenda</a></li>
+                <li><a href="#speakers">Speakers</a></li>
+                <li><a href="#themes">Themes</a></li>
+                <li><a href="#prizes">Prizes</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- 1. Event Timeline - White/Purple Animated Section -->
+        <div class="section-wrapper" id="timeline">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="gradient-text">Event Details Timeline</h1>
+                    <p>The journey from ideation to innovation, marked by glittering milestones.</p>
+                </div>
+                
+                <div class="timeline">
+                    <!-- Pre-Event Workshops -->
+                    <div class="timeline-container left">
+                        <div class="timeline-content">
+                            <span class="date">December 2–4, 2025</span>
+                            <h2>Pre-Event Workshops</h2>
+                            <p>Get ready with introductory sessions on AI tools, design thinking, and immersive technologies to prepare for the main event. These foundational workshops are key to a successful hackathon entry.</p>
+                        </div>
+                    </div>
+                    <!-- Launch & Ideation -->
+                    <div class="timeline-container right">
+                        <div class="timeline-content">
+                            <span class="date">Day 1: January 8, 2026</span>
+                            <h2>Launch & Ideation </h2>
+                            <p>The event kicks off with team registration, empathy mapping sessions, intensive ideation, and initial mentor reviews.</p>
+                        </div>
+                    </div>
+                    <!-- Development Sprint -->
+                    <div class="timeline-container left">
+                        <div class="timeline-content">
+                            <span class="date">Day 2: January 9, 2026</span>
+                            <h2>Development Sprint</h2>
+                            <p>Teams dive into prototype development, engage in peer evaluations, and focus on integrating sustainability practices into their solutions.</p>
+                        </div>
+                    </div>
+                    <!-- Final Presentations & Awards -->
+                    <div class="timeline-container right">
+                        <div class="timeline-content">
+                            <span class="date">Day 3: January 10, 2026</span>
+                            <h2>Final Presentations & Awards</h2>
+                            <p>The marathon concludes with final presentations to the jury, followed by the awards ceremony and valuable networking opportunities.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Detailed Schedule/Agenda (Inline Expansion) -->
+        <div class="section-wrapper" id="agenda">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="gradient-text">Detailed Agenda</h1>
+                    <p>Click on any schedule item to view the detailed description.</p>
+                </div>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Day 1: Launch & Concept Phase</h3>
+                        <div class="agenda-items">
+                            <div class="schedule-item">
+                                <div class="schedule-item-content">
+                                    <span class="schedule-time">09:00</span>
+                                    <div class="schedule-details">
+                                        <strong data-full-detail="Hear from industry leaders on the future of AI in Education and get inspired for the 48-hour challenge. The problem statements for all core themes will be officially revealed at this keynote.">Official Kick-off & Keynote</strong>
+                                        <small>Welcome address and announcement of challenge problem statements.</small>
+                                    </div>
+                                </div>
+                                <span class="schedule-toggle-icon" aria-hidden="true">+</span>
+                                <div class="inline-details">
+                                    <p class="inline-details-text"></p>
+                                </div>
+                            </div>
+                            <div class="schedule-item">
+                                <div class="schedule-item-content">
+                                    <span class="schedule-time">10:30</span>
+                                    <div class="schedule-details">
+                                        <strong data-full-detail="An interactive, guided session designed to help teams align their vision, identify user needs (Empathy Mapping), and finalize their solution concept before coding begins. Teams are encouraged to mix disciplines!">Team Formation & Ideation Workshop</strong>
+                                        <small>Guided session on Design Thinking and Empathy Mapping.</small>
+                                    </div>
+                                </div>
+                                <span class="schedule-toggle-icon" aria-hidden="true">+</span>
+                                <div class="inline-details">
+                                    <p class="inline-details-text"></p>
+                                </div>
+                            </div>
+                            <div class="schedule-item">
+                                <div class="schedule-item-content">
+                                    <span class="schedule-time">14:00</span>
+                                    <div class="schedule-details">
+                                        <strong data-full-detail="Grab a nutritious lunch and immediately transition into development. Mentors will be circulating throughout the venue for technical and strategic advice. Focus on setting up your initial environment.">Lunch & Open Hacking Begins</strong>
+                                        <small>Development starts. Mentors are available for 1:1 consultation.</small>
+                                    </div>
+                                </div>
+                                <span class="schedule-toggle-icon" aria-hidden="true">+</span>
+                                <div class="inline-details">
+                                    <p class="inline-details-text"></p>
+                                </div>
+                            </div>
+                            <div class="schedule-item">
+                                <div class="schedule-item-content">
+                                    <span class="schedule-time">19:00</span>
+                                    <div class="schedule-details">
+                                        <strong data-full-detail="Quick, informal check-ins (5-10 mins max) with a mentor to ensure you're on the right track. This is highly recommended for early feedback and course correction on your proof-of-concept.">Checkpoint Review (Optional)</strong>
+                                        <small>Quick 5-minute feedback sessions with mentors on initial concepts.</small>
+                                    </div>
+                                </div>
+                                <span class="schedule-toggle-icon" aria-hidden="true">+</span>
+                                <div class="inline-details">
+                                    <p class="inline-details-text"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>Day 2: Development & Refinement</h3>
+                        <div class="agenda-items">
+                            <div class="schedule-item">
+                                <div class="schedule-item-content">
+                                    <span class="schedule-time">08:00</span>
+                                    <div class="schedule-details">
+                                        <strong data-full-detail="Fuel up with breakfast. This is a dedicated, quiet period for focused coding. No interruptions, just flow state to finish your core feature set.">Breakfast & Coding Boost</strong>
+                                        <small>Dedicated silent coding block with light refreshments.</small>
+                                    </div>
+                                </div>
+                                <span class="schedule-toggle-icon" aria-hidden="true">+</span>
+                                <div class="inline-details">
+                                    <p class="inline-details-text"></p>
+                                </div>
+                            </div>
+                            <div class="schedule-item">
+                                <div class="schedule-item-content">
+                                    <span class="schedule-time">11:00</span>
+                                    <div class="schedule-details">
+                                        <strong data-full-detail="Practice pitching your Minimum Viable Product (MVP). Learn how to clearly articulate your problem, solution, and business/impact model in a concise, judge-friendly presentation.">Mid-Challenge Presentation Practice</a></strong>
+                                        <small>Session on effective communication and pitching educational products.</small>
+                                    </div>
+                                </div>
+                                <span class="schedule-toggle-icon" aria-hidden="true">+</span>
+                                <div class="inline-details">
+                                    <p class="inline-details-text"></p>
+                                </div>
+                            </div>
+                            <div class="schedule-item">
+                                <div class="schedule-item-content">
+                                    <span class="schedule-time">15:00</span>
+                                    <div class="schedule-details">
+                                        <strong data-full-detail="A focused talk on incorporating ethical AI practices and minimizing digital and environmental footprints in your EdTech solution. Vital for the 'Sustainability Impact' judging criteria.">Sustainability Integration Talk</strong>
+                                        <small>Expert session on making ed-tech solutions environmentally and ethically sustainable.</small>
+                                    </div>
+                                </div>
+                                <span class="schedule-toggle-icon" aria-hidden="true">+</span>
+                                <div class="inline-details">
+                                    <p class="inline-details-text"></p>
+                                </div>
+                            </div>
+                            <div class="schedule-item">
+                                <div class="schedule-item-content">
+                                    <span class="schedule-time">22:00</span>
+                                    <div class="schedule-details">
+                                        <strong data-full-detail="A much-needed break with snacks, drinks, and fun activities to refresh your mind before the final stretch of coding. Don't forget to save and commit your work before relaxing!">Late Night Energy Break</strong>
+                                        <small>Pizza and gaming break to keep the energy high!</small>
+                                    </div>
+                                </div>
+                                <span class="schedule-toggle-icon" aria-hidden="true">+</span>
+                                <div class="inline-details">
+                                    <p class="inline-details-text"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>Day 3: Submission & Awards</h3>
+                        <div class="agenda-items">
+                            <div class="schedule-item">
+                                <div class="schedule-item-content">
+                                    <span class="schedule-time">09:00</span>
+                                    <div class="schedule-details">
+                                        <strong data-full-detail="All development must stop promptly at 09:00. Teams must ensure their code repository, video demo, and project documentation are uploaded and finalized. Use the last hour for final presentation prep.">Code Freeze & Submission Deadline</strong>
+                                        <small>Final code push, video demo, and documentation due on the submission platform.</small>
+                                    </div>
+                                </div>
+                                <span class="schedule-toggle-icon" aria-hidden="true">+</span>
+                                <div class="inline-details">
+                                    <p class="inline-details-text"></p>
+                                </div>
+                            </div>
+                            <div class="schedule-item">
+                                <div class="schedule-item-content">
+                                    <span class="schedule-time">10:30</span>
+                                    <div class="schedule-details">
+                                        <strong data-full-detail="A closed-door session where judges evaluate submissions based on the initial criteria (Innovation, AI Depth, Documentation). Only the top teams will be selected and notified for the live Finalist Presentations.">Initial Judging Round</strong>
+                                        <small>Judges review submissions digitally to select finalists.</small>
+                                    </div>
+                                </div>
+                                <span class="schedule-toggle-icon" aria-hidden="true">+</span>
+                                <div class="inline-details">
+                                    <p class="inline-details-text"></p>
+                                </div>
+                            </div>
+                            <div class="schedule-item">
+                                <div class="schedule-item-content">
+                                    <span class="schedule-time">13:00</span>
+                                    <div class="schedule-details">
+                                        <strong data-full-detail="The top 10 teams present their full solution live to the final jury panel. Be ready for tough questions and insightful feedback. Each presentation is 5 minutes with 3 minutes for Q&A.">Finalist Presentations (Live)</strong>
+                                        <small>Top 10 teams present their solutions live to the final jury panel.</small>
+                                    </div>
+                                </div>
+                                <span class="schedule-toggle-icon" aria-hidden="true">+</span>
+                                <div class="inline-details">
+                                    <p class="inline-details-text"></p>
+                                </div>
+                            </div>
+                            <div class="schedule-item">
+                                <div class="schedule-item-content">
+                                    <span class="schedule-time">17:00</span
+                                    ><div class="schedule-details">
+                                        <strong data-full-detail="Celebrate the successes! Winners of all categories will be announced, distribution of prizes will occur, followed by a networking reception to connect with judges, sponsors, and peers for future opportunities.">Awards Ceremony & Closing Remarks</strong>
+                                        <small>Announcement of winners, distribution of prizes, and networking reception.</small>
+                                    </div>
+                                </div>
+                                <span class="schedule-toggle-icon" aria-hidden="true">+</span>
+                                <div class="inline-details">
+                                    <p class="inline-details-text"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Distinguished Speakers & Mentors -->
+        <div class="section-wrapper" id="speakers">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="gradient-text">Distinguished Speakers & Mentors</h1>
+                    <p>Learn from the visionaries shaping the future of education and technology.</p>
+                </div>
+                <div class="grid">
+                    <!-- Speaker 1 -->
+                    <div class="card speaker-card">
+                        <img src="https://placehold.co/120x120/9D59D3/ffffff?text=JM" alt="Image of Jane M." onerror="this.onerror=null; this.src='https://placehold.co/120x120/9D59D3/ffffff?text=JM'">
+                        <h4>Dr. Jane Mather</h4>
+                        <span class="role">Chief AI Scientist, EdTech Labs</span>
+                        <p>Dr. Mather is a pioneer in adaptive learning algorithms and will deliver the opening keynote on responsible AI development.</p>
+                    </div>
+                    <!-- Speaker 2 -->
+                    <div class="card speaker-card">
+                        <img src="https://placehold.co/120x120/6A0DAD/ffffff?text=RK" alt="Image of Ryan K." onerror="this.onerror=null; this.src='https://placehold.co/120x120/6A0DAD/ffffff?text=RK'">
+                        <h4>Ryan Kinsley</h4>
+                        <span class="role">Head of Product, Horizon Tech Solutions</span>
+                        <p>As a lead mentor, Ryan specializes in product-market fit and agile development methodologies for EdTech startups.</p>
+                    </div>
+                    <!-- Speaker 3 -->
+                    <div class="card speaker-card">
+                        <img src="https://placehold.co/120x120/9D59D3/ffffff?text=AF" alt="Image of Anya S." onerror="this.onerror=null; this.src='https://placehold.co/120x120/9D59D3/ffffff?text=AF'">
+                        <h4>Anya Sharma</h4>
+                        <span class="role">VP, Global Education Strategy</span>
+                        <p>Anya leads global initiatives to combat digital misinformation and will judge the 'Responsible AI' and 'Fake Information' categories.</p>
+                    </div>
+                    <!-- Speaker 4 -->
+                    <div class="card speaker-card">
+                        <img src="https://placehold.co/120x120/6A0DAD/ffffff?text=DP" alt="Image of David P." onerror="this.onerror=null; this.src='https://placehold.co/120x120/6A0DAD/ffffff?text=DP'">
+                        <h4>David Patel</h4>
+                        <span class="role">Lead UX/UI Mentor</span>
+                        <p>David focuses on user experience and accessibility. He will provide hands-on mentorship during the development sprint on Day 2.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Objectives & Themes (Multi-Color Rotating Border) -->
+        <div class="section-wrapper" id="themes">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="gradient-text">Objectives & Themes</h1>
+                    <p>Core objectives, themes, and judging criteria are detailed below.</p>
+                </div>
+                <div class="grid" id="accordion-grid">
+                    <!-- Objectives Card (ORANGE Rotating Border) -->
+                    <div class="card theme-red">
+                        <h3 class="accordion-header">
+                            Objectives for Participants
+                            <span class="accordion-icon">(Goals)</span>
+                        </h3>
+                        <div class="accordion-content" id="objectives-content">
+                            <ul>
+                                <li>Personalize learning with AI-driven tools.</li>
+                                <li>Develop inclusive and adaptive educational systems.</li>
+                                <li>Integrate sustainability into learning.</li>
+                                <li>Redefine teaching for the AI-driven era.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Core Themes Card (RUBY/DEEP RED Rotating Border) -->
+                    <div class="card theme-cyan">
+                        <h3 class="accordion-header">
+                            Core Themes
+                            <span class="accordion-icon">(Focus Areas)</span>
+                        </h3>
+                        <div class="accordion-content" id="themes-content">
+                            <ul>
+                                <li>AI in Education</li>
+                                <li>Responsible AI</li>
+                                <li>Combating Fake Information</li>
+                                <li>AI to Foster Well-being</li>
+                                <li>Digital Humanities</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Judging Criteria Card (YELLOW Rotating Border) -->
+                    <div class="card theme-magenta">
+                        <h3 class="accordion-header">
+                            Judging Criteria
+                            <span class="accordion-icon">(Evaluation Metrics)</span>
+                        </h3>
+                        <div class="accordion-content" id="judging-content">
+                            <ul>
+                               <li><strong>Innovation & Creativity:</strong> Originality and uniqueness of the solution.</li>
+                               <li><strong>Sustainability Impact:</strong> Contribution to eco-friendly, lasting solutions.</li>
+                               <li><strong>AI Integration Depth:</strong> Effective use of advanced technologies.</li>
+                               <li><strong>Heutagogical Relevance:</strong> Support for self-directed learning.</li>
+                               <li><strong>Presentation Clarity:</strong> Quality of communication.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Prizes & Recognition (UPDATED WITH LATEST DETAILS) -->
+        <div class="section-wrapper" id="prizes">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="gradient-text">Prizes & Recognition</h1>
+                    <p>The awards for the top innovative solutions.</p>
+                </div>
+                <div class="grid">
+                    <!-- GRAND PRIZE -->
+                    <div class="card prize-card">
+                        <h3 class="prize-card-title">
+                            Grand Prize Winner
+                        </h3>
+                        <div class="prize-details-container">
+                            <ul class="prize-details-list">
+                                <li><strong>Prize:</strong> $5,000 USD Seed Grant</li>
+                                <li><strong>Access:</strong> Direct Fast-Track to Investment Pitch Committee</li>
+                                <li><strong>Mentorship:</strong> Dedicated 1:1 Bi-Weekly Coaching Sessions (6 Months)</li>
+                                <li><strong>Event:</strong> Invitation to Present at Global Summit 2026</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- RUNNER-UP -->
+                    <div class="card prize-card">
+                        <h3 class="prize-card-title">
+                            Runner-Up Teams (2)
+                        </h3>
+                        <div class="prize-details-container">
+                             <ul class="prize-details-list">
+                                <li><strong>Prize:</strong> $1,500 USD Cash Each</li>
+                                <li><strong>Access:</strong> 1-Year Subscription to **OpenAI API Pro**</li>
+                                <li><strong>Credits:</strong> $1,000 in Google Cloud Credits</li>
+                                <li><strong>Recognition:</strong> Permanent Official Website Spotlight</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- SPECIAL CATEGORIES (Combined two cards for display layout) -->
+                    <div class="card prize-card">
+                        <h3 class="prize-card-title">
+                            Special Category Awards
+                        </h3>
+                        <div class="prize-details-container">
+                            <ul class="prize-details-list">
+                                <li><strong>Deep AI Innovation Award:</strong> $500 Cash Prize</li>
+                                <li><strong>GreenTech Pioneer Award:</strong> Eco-Friendly Dev Kits & $500 Hardware Voucher</li>
+                                <li><strong>Heutagogy & Impact Award:</strong> Professional Development Courses</li>
+                                <li>**NEW** **Audience Favorite Award:** $300 USD Cash Prize & Custom Trophy</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>© EduAIthon 2026 | The Gold Standard in EdTech Innovation.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Schedule Item Inline Expansion Logic (Modified for visual toggle) ---
+            const scheduleItems = document.querySelectorAll('.schedule-item');
+
+            scheduleItems.forEach(item => {
+                // Listener remains on the whole item for a large touch target
+                item.addEventListener('click', () => {
+                    const isExpanded = item.classList.contains('expanded');
+                    const detailsContainer = item.querySelector('.inline-details');
+                    const detailsTextElement = item.querySelector('.inline-details-text');
+                    const fullDetailText = item.querySelector('strong').getAttribute('data-full-detail');
+
+                    // 1. Close all other expanded items
+                    scheduleItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('expanded')) {
+                            otherItem.classList.remove('expanded');
+                            otherItem.querySelector('.inline-details').style.maxHeight = null;
+                        }
+                    });
+
+                    // 2. Toggle current item
+                    if (isExpanded) {
+                        item.classList.remove('expanded');
+                        detailsContainer.style.maxHeight = null;
+                    } else {
+                        detailsTextElement.textContent = fullDetailText;
+                        
+                        // Allow text to render before calculating height
+                        setTimeout(() => {
+                            item.classList.add('expanded');
+                            // Calculate height dynamically: text height + padding/margin buffer (50px)
+                            detailsContainer.style.maxHeight = detailsTextElement.offsetHeight + 50 + "px";
+                        }, 10); 
+                    }
+                });
+            });
+
+            // --- Mobile Navigation Toggle Logic (New) ---
+            const menuToggleBtn = document.getElementById('menu-toggle-btn');
+            const navLinks = document.getElementById('nav-links');
+
+            if (menuToggleBtn && navLinks) {
+                const closeMenu = () => {
+                    navLinks.classList.remove('nav-open');
+                    menuToggleBtn.setAttribute('aria-expanded', 'false');
+                    // Remove click listeners from links after closing
+                    document.querySelectorAll('.nav-links a').forEach(link => {
+                        link.removeEventListener('click', closeMenu);
+                    });
+                };
+                
+                menuToggleBtn.addEventListener('click', () => {
+                    const isExpanded = navLinks.classList.toggle('nav-open');
+                    menuToggleBtn.setAttribute('aria-expanded', isExpanded);
+                    
+                    // Add listener to close menu when a link is clicked (for better UX)
+                    if (isExpanded) {
+                         document.querySelectorAll('.nav-links a').forEach(link => {
+                            link.addEventListener('click', closeMenu);
+                        });
+                    } else {
+                        // Cleanup listeners if menu is manually closed
+                        document.querySelectorAll('.nav-links a').forEach(link => {
+                            link.removeEventListener('click', closeMenu);
+                        });
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQ — EduAIthon 2026</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --------------------------------------------------
+         * Black, Gold, Grey, and Accent Colors Definition
+         * -------------------------------------------------- */
+        :root {
+            --bg-deep: #0A0A0A; /* Main Background (Deep Black) */
+            --bg-card: #1C1C1E; /* Card Background (Dark Charcoal) */
+            --text-light: #F3F4F6; /* Main Text Color (Off-White) */
+            --text-secondary: #A0A0A0; /* Secondary Text Color (Soft Grey) */
+            --gold-bright: #FFD700; /* Bright Gold */
+            --gold-dark: #B8860B; /* Dark Metallic Gold (Accent) */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+        
+        /* --------------------------------------------------
+         * 1. Gold Text Animation (Shimmer)
+         * -------------------------------------------------- */
+        @keyframes gold-shift {
+            0% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+            100% { background-position: 0% 50%; } 
+        }
+        
+        .gradient-text {
+            /* Text gradient using the new gold palette */
+            background: linear-gradient(90deg, var(--gold-bright), var(--gold-dark), var(--gold-bright), var(--gold-dark), var(--gold-bright));
+            background-size: 600% auto; 
+            
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            
+            /* Apply the gold animation */
+            animation: gold-shift 8s ease-in-out infinite; 
+        }
+
+        /* --------------------------------------------------
+         * 2. Accordion Glow Animation
+         * -------------------------------------------------- */
+        @keyframes gold-pulse {
+            0%, 100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.4); }
+            50% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.8); }
+        }
+
+        .accordion-item {
+            background-color: var(--bg-card);
+            border-radius: 0.75rem; /* rounded-xl */
+            transition: box-shadow 0.3s ease, border-left 0.3s ease;
+            margin-bottom: 1rem; /* space-y-4 */
+            border-left: 4px solid var(--border-dark); /* Initial dark border */
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            cursor: pointer;
+            padding: 1.5rem;
+            font-weight: 700;
+            color: var(--text-light);
+            transition: background-color 0.2s ease;
+            position: relative;
+        }
+        
+        /* Adds the arrow indicator */
+        .accordion-header::after {
+            content: '+';
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%) rotate(0deg);
+            transition: transform 0.3s ease;
+            font-size: 1.5rem;
+            line-height: 1;
+            color: var(--gold-bright);
+        }
+
+        .accordion-item.active .accordion-header::after {
+            content: '-';
+            transform: translateY(-50%) rotate(0deg);
+        }
+
+        /* Active state for the item: apply animation and border color */
+        .accordion-item.active {
+            border-left-color: var(--gold-bright);
+            animation: gold-pulse 4s infinite ease-in-out;
+        }
+
+        .accordion-item:hover .accordion-header {
+            background-color: #2a2a2d; /* Slightly lighter charcoal on hover */
+        }
+
+        .accordion-content {
+            padding: 0 1.5rem;
+            max-height: 0;
+            transition: max-height 0.3s ease-in-out;
+            color: var(--text-secondary);
+            overflow: hidden;
+        }
+
+        .accordion-content p {
+            padding-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* Utility for navigation */
+        .container {
+            max-width: 1280px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation (Simple structure maintained) -->
+    <header class="bg-deep border-b border-gold-dark sticky top-0 z-10 shadow-lg">
+        <nav class="container flex justify-between items-center py-4">
+            <div class="brand">
+                <a class="gradient-text text-3xl font-extrabold" href="index.html"><strong>EduAIthon</strong></a>
+            </div>
+            
+            <ul class="flex space-x-6 text-sm font-medium hidden md:flex">
+                <li><a href="#" class="text-white hover:text-gold-bright transition duration-200">Home</a></li>
+                <li><a href="#" class="text-white hover:text-gold-bright transition duration-200">About</a></li>
+                <li><a href="#" class="text-white hover:text-gold-bright transition duration-200">Event</a></li>
+                <li><a href="#" class="text-white hover:text-gold-bright transition duration-200">Registration</a></li>
+                <li><a href="#" class="text-white hover:text-gold-bright transition duration-200">Help Desk</a></li>
+                <li><a href="#" class="text-white hover:text-gold-bright transition duration-200">Gallery</a></li>
+                <li><a href="#" class="text-gold-bright border-b-2 border-gold-bright transition duration-200">FAQ</a></li>
+                <li><a href="#" class="text-white hover:text-gold-bright transition duration-200">Core Team</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="py-16 md:py-24">
+        <div class="container" style="max-width: 900px;">
+            <div class="text-center mb-16">
+                <h1 class="gradient-text text-5xl md:text-6xl font-black mb-3 tracking-tight">Frequently Asked Questions</h1>
+                <p class="text-xl text-secondary font-semibold">Have questions? We've got answers.</p>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">Who is eligible to participate?</div>
+                    <div class="accordion-content">
+                        <p>The event is open to all currently enrolled undergraduate and postgraduate students from any discipline. We encourage interdisciplinary teams!</p>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">What is the ideal team size?</div>
+                    <div class="accordion-content">
+                        <p>Teams should consist of 3 to 4 members. A diverse team with varied skill sets (e.g., coding, design, subject matter expertise) is highly recommended for a competitive edge.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">Do I need a fully formed idea to register?</div>
+                    <div class="accordion-content">
+                        <p>You need to submit an initial idea outline (max 300 words) and a problem statement (max 150 words) upon registration. However, this idea can be refined during the pre-event workshops and ideation sessions.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">Is there a registration fee?</div>
+                    <div class="accordion-content">
+                        <p>Information regarding registration fees, if any, will be announced on the official registration portal. Please check back closer to the registration date.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">What kind of mentorship will be provided?</div>
+                    <div class="accordion-content">
+                        <p>Each team will be guided by a faculty mentor. Additionally, during the event, there will be sessions with industry experts and experienced researchers who can provide technical and strategic guidance.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">What technologies can we use?</div>
+                    <div class="accordion-content">
+                        <p>You are encouraged to use modern technologies, especially those related to the themes like AI, Machine Learning, AR/VR, and Digital Twins. However, there are no strict limitations, as long as the solution is innovative and addresses the problem statement effectively.</p>
+                    </div>
+                </div>
+
+                <!-- --- NEW QUESTIONS ADDED BELOW --- -->
+
+                <div class="accordion-item">
+                    <div class="accordion-header">What are the final submission requirements?</div>
+                    <div class="accordion-content">
+                        <p>The final submission must include a working prototype (code repository link), a short video demonstration (maximum 3 minutes), and a brief documentation report summarizing your solution and its adherence to the core themes.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">What happens to the Intellectual Property (IP) of our solution?</div>
+                    <div class="accordion-content">
+                        <p>Teams retain full ownership of the Intellectual Property (IP) developed during the event. However, by participating, teams grant the event organizers non-exclusive rights to use the project name and images for promotional and reporting purposes.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">Will technical support be available during the hackathon?</div>
+                    <div class="accordion-content">
+                        <p>Yes, dedicated technical mentors and support staff will be available 24/7 through a dedicated communication channel (such as Discord or Slack) to assist with any technical roadblocks or platform issues. Details will be shared upon registration.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">Are we allowed to use pre-existing code or resources?</div>
+                    <div class="accordion-content">
+                        <p>You are allowed to use open-source libraries and public APIs. However, the core logic and unique components of the solution must be developed entirely during the hackathon period. All dependencies must be properly cited in your documentation.</p>
+                    </div>
+                </div>
+
+                <!-- --- NEW QUESTIONS END --- -->
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-deep border-t border-gold-dark mt-16 py-8">
+        <div class="container text-center text-secondary text-sm font-medium">
+            <p>© IUCEE – EduAIthon 2026 | 
+                <a href="#" class="text-gold-bright hover:text-white transition duration-200">Contact</a> | 
+                <a href="#" class="text-gold-bright hover:text-white transition duration-200">Terms</a> | 
+                <a href="#" class="text-gold-bright hover:text-white transition duration-200">Privacy</a>
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const accordionItems = document.querySelectorAll('.accordion-item');
+            
+            accordionItems.forEach(item => {
+                const header = item.querySelector('.accordion-header');
+                
+                header.addEventListener('click', () => {
+                    const content = item.querySelector('.accordion-content');
+                    
+                    // Close other items
+                    accordionItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                            otherItem.querySelector('.accordion-content').style.maxHeight = '0';
+                        }
+                    });
+                    
+                    // Toggle current item
+                    item.classList.toggle('active');
+                    if (item.classList.contains('active')) {
+                        // Set maxHeight to scrollHeight to enable smooth transition
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                    } else {
+                        content.style.maxHeight = '0';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

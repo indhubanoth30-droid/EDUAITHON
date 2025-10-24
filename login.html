@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Project Submission & Viewer</title>
+    <!-- Load Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Define the primary accent color for easy reuse and customization */
+        :root {
+            --accent-color: #9D4EDD; /* Medium Purple */
+            --accent-dark: #7B2CBF;  /* Darker Purple */
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        /* Custom styling for the progress stepper */
+        .step {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1; 
+        }
+
+        .step-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e5e7eb; 
+            color: #4b5563; 
+            font-weight: 700;
+            transition: background-color 0.4s, color 0.4s;
+            z-index: 10;
+            border: 2px solid transparent;
+        }
+
+        .step-circle.active {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-dark);
+        }
+        
+        .step-circle.completed {
+            background-color: var(--accent-dark);
+            color: white;
+            border-color: var(--accent-dark);
+        }
+
+        .step-label {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+            text-align: center;
+            transition: color 0.4s;
+            white-space: nowrap; 
+        }
+
+        .step-circle.active + .step-label,
+        .step-circle.completed + .step-label {
+            color: var(--accent-dark);
+            font-weight: 600;
+        }
+
+        /* Line segment styling - visually connect steps */
+        .step:not(:last-child)::before {
+            content: '';
+            position: absolute;
+            top: 17px;
+            left: 50%;
+            width: 100%; 
+            height: 2px;
+            background-color: #e5e7eb;
+            transform: translateX(-50%) translateX(18px); 
+            transition: background-color 0.4s ease-in-out;
+            z-index: 5;
+        }
+        
+        #step-2-tracker::before { right: 50%; left: 0; width: 100%; transform: none; }
+        #step-3-tracker::before { right: 50%; left: 0; width: 100%; transform: none; }
+
+        .step.completed:not(:last-child)::before {
+            background-color: var(--accent-dark);
+        }
+
+        /* --- Step Content Transition (for multi-step form) --- */
+        .step-content {
+            position: absolute;
+            width: 100%;
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            opacity: 0;
+            transform: translateX(100%); 
+            pointer-events: none;
+            padding: 0 1rem;
+        }
+
+        .step-content.active {
+            position: static;
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+        
+        /* Loading Indicator Styles */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+
+    <!-- FIX FOR LOCAL EXECUTION: Define global Firebase variables with placeholder values. -->
+    <script>
+        // NOTE: Replace the __firebase_config values with your own keys for real data saving!
+        if (typeof __app_id === 'undefined') {
+            window.__app_id = 'local-dev-app'; 
+        }
+        if (typeof __firebase_config === 'undefined') {
+            window.__firebase_config = JSON.stringify({
+                apiKey: "YOUR_API_KEY",
+                authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+                projectId: "YOUR_PROJECT_ID",
+                storageBucket: "YOUR_PROJECT_ID.appspot.com",
+                messagingSenderId: "SENDER_ID",
+                appId: "APP_ID"
+            });
+        }
+        if (typeof __initial_auth_token === 'undefined') {
+            window.__initial_auth_token = null;
+        }
+    </script>
+</head>
+<body>
+
+    <header class="w-full max-w-4xl mx-auto py-4 mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Team Project Submission & Viewer</h1>
+    </header>
+
+    <div class="w-full max-w-4xl mx-auto bg-white p-6 sm:p-10 rounded-xl shadow-2xl">
+        
+        <!-- Navigation Tabs -->
+        <div class="flex border-b border-gray-200 mb-8">
+            <button id="nav-form" onclick="setPage('form')" class="py-3 px-6 text-sm font-medium border-b-4 border-[var(--accent-dark)] text-[var(--accent-dark)] transition-colors hover:bg-gray-50">
+                Submission Form
+            </button>
+            <button id="nav-viewer" onclick="setPage('viewer')" class="py-3 px-6 text-sm font-medium border-b-4 border-transparent text-gray-500 transition-colors hover:text-gray-700 hover:border-gray-300">
+                View Submissions
+            </button>
+        </div>
+
+        <!-- MAIN APP CONTENT CONTAINER (Form or Viewer) -->
+        <div id="main-content-container">
+
+            <!-- PAGE 1: SUBMISSION FORM VIEW -->
+            <div id="form-view" class="block">
+                
+                <!-- Progress Stepper -->
+                <div id="progress-stepper" class="flex justify-between items-start mb-12 max-w-2xl mx-auto px-4">
+                    <!-- Step Trackers are managed by JS -->
+                    <div id="step-1-tracker" class="step completed">
+                        <div class="step-circle active">1</div>
+                        <span class="step-label">Lead Details</span>
+                    </div>
+                    <div id="step-2-tracker" class="step">
+                        <div class="step-circle">2</div>
+                        <span class="step-label">Team Info</span>
+                    </div>
+                    <div id="step-3-tracker" class="step">
+                        <div class="step-circle">3</div>
+                        <span class="step-label">Submit Project</span>
+                    </div>
+                </div>
+                
+                <hr class="mb-8 border-gray-200">
+
+                <!-- Form Content Container -->
+                <div id="form-container" class="relative overflow-hidden min-h-[600px] sm:min-h-[500px]">
+
+                    <!-- STEP 1: Personal and Contact Information (Details) -->
+                    <div id="step-1" class="step-content active">
+                        <h2 class="text-xl font-bold text-gray-800 mb-2">Personal and Contact Information (Team Lead)</h2>
+                        <p class="text-gray-500 mb-6 text-sm">Please provide the team lead's details for primary contact.</p>
+
+                        <form id="form-step-1" class="space-y-4">
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <!-- Full Name -->
+                                <div>
+                                    <label for="fullName" class="block text-sm font-medium text-gray-700">Full Name *</label>
+                                    <input type="text" id="fullName" name="fullName" class="mt-1 block w-full rounded-lg border border-gray-300 p-2.5 focus:border-purple-500 focus:ring-purple-500 shadow-sm" required>
+                                </div>
+                                <!-- Email Address -->
+                                <div>
+                                    <label for="emailAddress" class="block text-sm font-medium text-gray-700">Email Address *</label>
+                                    <input type="email" id="emailAddress" name="emailAddress" class="mt-1 block w-full rounded-lg border border-gray-300 p-2.5 focus:border-purple-500 focus:ring-purple-500 shadow-sm" required>
+                                </div>
+                            </div>
+                            
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <!-- Affiliation / Institution -->
+                                <div>
+                                    <label for="institution" class="block text-sm font-medium text-gray-700">Affiliation / Institution *</label>
+                                    <input type="text" id="institution" name="institution" class="mt-1 block w-full rounded-lg border border-gray-300 p-2.5 focus:border-purple-500 focus:ring-purple-500 shadow-sm" required>
+                                </div>
+                                <!-- Contact Number -->
+                                <div>
+                                    <label for="contactNumber" class="block text-sm font-medium text-gray-700">Contact Number</label>
+                                    <input type="tel" id="contactNumber" name="contactNumber" class="mt-1 block w-full rounded-lg border border-gray-300 p-2.5 focus:border-purple-500 focus:ring-purple-500 shadow-sm">
+                                </div>
+                            </div>
+
+                            <!-- Country / Region -->
+                            <div>
+                                <label for="country" class="block text-sm font-medium text-gray-700">Country / Region *</label>
+                                <select id="country" name="country" class="mt-1 block w-full rounded-lg border border-gray-300 p-2.5 focus:border-purple-500 focus:ring-purple-500 shadow-sm appearance-none" required>
+                                    <option value="">Select your country</option>
+                                    <option value="IN">India</option>
+                                    <option value="US">United States</option>
+                                    <option value="CA">Canada</option>
+                                    <option value="GB">United Kingdom</option>
+                                    <option value="AU">Australia</option>
+                                    <option value="OT">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="flex justify-end pt-4">
+                                <button type="submit" class="px-6 py-3 bg-[var(--accent-dark)] text-white font-semibold rounded-full hover:bg-[var(--accent-color)] transition-colors shadow-md focus:outline-none focus:ring-2 focus:ring-[var(--accent-dark)] focus:ring-offset-2">
+                                    Next: Team Info
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- STEP 2: Team Information (Team Name, Member Count & Names + Sex) -->
+                    <div id="step-2" class="step-content">
+                        <h2 class="text-xl font-bold text-gray-800 mb-2">Team Member Information</h2>
+                        <p class="text-gray-500 mb-6 text-sm">Define your team structure and list the name and gender of all members.</p>
+
+                        <form id="form-step-2" class="space-y-6">
+                            <!-- Team Name -->
+                            <div>
+                                <label for="teamName" class="block text-sm font-medium text-gray-700">Team Name *</label>
+                                <input type="text" id="teamName" name="teamName" class="mt-1 block w-full rounded-lg border border-gray-300 p-2.5 focus:border-purple-500 focus:ring-purple-500 shadow-sm" required>
+                            </div>
+
+                            <!-- Number of Team Members -->
+                            <div>
+                                <label for="numMembers" class="block text-sm font-medium text-gray-700">Number of Team Members (Including Lead) *</label>
+                                <input type="number" id="numMembers" name="numMembers" min="1" max="10" value="1" oninput="updateTeamMemberInputs(this.value)" class="mt-1 block w-full rounded-lg border border-gray-300 p-2.5 focus:border-purple-500 focus:ring-purple-500 shadow-sm" required>
+                                <p class="text-xs text-gray-500 mt-1">Maximum 10 members allowed.</p>
+                            </div>
+                            
+                            <!-- Dynamic Team Member Name and Sex Inputs -->
+                            <div id="teamMemberInputs" class="space-y-3 p-4 border rounded-xl bg-gray-50 shadow-inner">
+                                <h3 class="font-semibold text-gray-700">Team Member Information (Total: 1)</h3>
+                                <!-- Dynamic inputs injected by JS -->
+                            </div>
+                            
+                            <div class="flex justify-between pt-6">
+                                <button type="button" onclick="goToStep(1)" class="px-6 py-3 text-[var(--accent-dark)] font-semibold rounded-full border-2 border-gray-300 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--accent-dark)] focus:ring-offset-2">
+                                    Back
+                                </button>
+                                <button type="submit" class="px-6 py-3 bg-[var(--accent-dark)] text-white font-semibold rounded-full hover:bg-[var(--accent-color)] transition-colors shadow-md focus:outline-none focus:ring-2 focus:ring-[var(--accent-dark)] focus:ring-offset-2">
+                                    Next: Project Details
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- STEP 3: Project Details (Problem Statement, Solution) -->
+                    <div id="step-3" class="step-content">
+                        <h2 class="text-xl font-bold text-gray-800 mb-2">Project Details</h2>
+                        <p class="text-gray-500 mb-6 text-sm">Provide details about the problem and your team's solution.</p>
+
+                        <form id="form-step-3" class="space-y-6">
+
+                            <!-- Problem Statement -->
+                            <div>
+                                <label for="problemStatement" class="block text-sm font-medium text-gray-700">Problem Statement *</label>
+                                <textarea id="problemStatement" name="problemStatement" rows="4" class="mt-1 block w-full rounded-lg border border-gray-300 p-2.5 focus:border-purple-500 focus:ring-purple-500 shadow-sm" required placeholder="Describe the problem your team is solving (max 500 words)."></textarea>
+                            </div>
+
+                            <!-- Solution -->
+                            <div>
+                                <label for="solution" class="block text-sm font-medium text-gray-700">Solution *</label>
+                                <textarea id="solution" name="solution" rows="4" class="mt-1 block w-full rounded-lg border border-gray-300 p-2.5 focus:border-purple-500 focus:ring-purple-500 shadow-sm" required placeholder="Describe your proposed solution (max 500 words)."></textarea>
+                            </div>
+                            
+                            <!-- Submission Status Message -->
+                            <div id="submissionStatus" class="mt-6 p-4 rounded-xl hidden border font-medium"></div>
+
+                            <div class="flex justify-between pt-6">
+                                <button type="button" onclick="goToStep(2)" class="px-6 py-3 text-[var(--accent-dark)] font-semibold rounded-full border-2 border-gray-300 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--accent-dark)] focus:ring-offset-2">
+                                    Back
+                                </button>
+                                <button type="submit" id="submitButton" disabled class="px-6 py-3 bg-green-600 text-white font-semibold rounded-full hover:bg-green-700 transition-colors shadow-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <span>Submit and Save Data</span>
+                                    <div id="submitSpinner" class="spinner hidden"></div>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 2: VIEW SUBMISSIONS -->
+            <div id="viewer-view" class="hidden">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Submitted Projects</h2>
+                
+                <!-- NEW: Search Input Field -->
+                <div class="mb-6 flex space-x-2">
+                    <input type="text" id="filter-input" oninput="handleFilterInput()" placeholder="Search by Team Name, Lead Name, or Submission ID..." class="flex-grow rounded-lg border border-gray-300 p-2.5 shadow-sm focus:border-[var(--accent-dark)] focus:ring-[var(--accent-dark)]">
+                    <button onclick="handleFilterInput()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">
+                        <!-- Search Icon (Magnifying Glass SVG) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Submission List Container -->
+                <div id="submissions-list" class="space-y-4">
+                    <p id="loading-indicator" class="text-gray-500 italic">Loading submissions...</p>
+                    <!-- Submissions will be injected here -->
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, addDoc, collection, setLogLevel, onSnapshot, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- GLOBAL FIREBASE SETUP ---
+        setLogLevel('debug'); 
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let db = null;
+        let auth = null;
+        let userId = 'anon_user';
+        let isFirebaseReady = false; 
+        
+        // GLOBAL STATE for Submissions and Filtering
+        let allSubmissions = []; // Holds all fetched submissions
+
+        // --- DOM Elements (Used in the script) ---
+        const submitButton = document.getElementById('submitButton');
+        const submitSpinner = document.getElementById('submitSpinner');
+        const submissionStatus = document.getElementById('submissionStatus');
+        const teamMemberInputsContainer = document.getElementById('teamMemberInputs');
+        const fullNameInput = document.getElementById('fullName');
+        
+        // New DOM elements for viewer
+        const formView = document.getElementById('form-view');
+        const viewerView = document.getElementById('viewer-view');
+        const navForm = document.getElementById('nav-form');
+        const navViewer = document.getElementById('nav-viewer');
+        const submissionsList = document.getElementById('submissions-list');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const progressStepper = document.getElementById('progress-stepper');
+        const filterInput = document.getElementById('filter-input');
+
+
+        /**
+         * Initializes Firebase and authenticates the user.
+         */
+        async function initializeFirebase() {
+            submitButton.disabled = true;
+
+            if (!firebaseConfig || !firebaseConfig.projectId || firebaseConfig.projectId === "YOUR_PROJECT_ID") {
+                 console.error("Firebase config is missing or placeholder. The application will be non-functional.");
+                 showStatusMessage("Warning: Firebase config missing. Submission will fail.", 'error', false);
+                 isFirebaseReady = false;
+                 return;
+            }
+
+            try {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                await setPersistence(auth, browserSessionPersistence);
+
+                if (initialAuthToken) {
+                    const userCredential = await signInWithCustomToken(auth, initialAuthToken);
+                    userId = userCredential.user.uid;
+                } else {
+                    const userCredential = await signInAnonymously(auth);
+                    userId = userCredential.user.uid;
+                }
+                
+                isFirebaseReady = true; 
+                console.log("Firebase initialized. User authenticated with ID:", userId);
+                
+                // If on the form page, enable submit button
+                if (currentPage === 'form' && currentStep === 3) {
+                    showStatusMessage("Database connection ready. You can submit the form.", 'success', false);
+                    submitButton.disabled = false;
+                } else if (currentPage === 'form') {
+                    showStatusMessage("Database connecting...", 'success', true); 
+                }
+
+                // Start fetching submissions immediately for the viewer page (sets up listener)
+                fetchSubmissions();
+
+            } catch (error) {
+                console.error("Error initializing Firebase or signing in:", error);
+                showStatusMessage("Error: Could not connect to the database. Submission will fail. Please check the console.", 'error', false);
+                isFirebaseReady = false;
+                submitButton.disabled = true; 
+            }
+        }
+
+        // --- PAGE AND NAVIGATION LOGIC ---
+
+        let currentPage = 'form'; // 'form' or 'viewer'
+
+        /** Sets the current main page of the application. */
+        function setPage(page) {
+            currentPage = page;
+            
+            navForm.classList.remove('border-[var(--accent-dark)]', 'text-[var(--accent-dark)]');
+            navViewer.classList.remove('border-[var(--accent-dark)]', 'text-[var(--accent-dark)]');
+            navForm.classList.add('border-transparent', 'text-gray-500');
+            navViewer.classList.add('border-transparent', 'text-gray-500');
+
+            if (page === 'form') {
+                formView.style.display = 'block';
+                viewerView.style.display = 'none';
+                navForm.classList.add('border-[var(--accent-dark)]', 'text-[var(--accent-dark)]');
+                navForm.classList.remove('border-transparent', 'text-gray-500');
+                progressStepper.style.display = 'flex';
+                // Re-enable submit button if on final step and ready
+                if (currentStep === 3 && isFirebaseReady) submitButton.disabled = false;
+            } else {
+                formView.style.display = 'none';
+                viewerView.style.display = 'block';
+                navViewer.classList.add('border-[var(--accent-dark)]', 'text-[var(--accent-dark)]');
+                navViewer.classList.remove('border-transparent', 'text-gray-500');
+                progressStepper.style.display = 'none';
+                submitButton.disabled = true; // Disable submit button on viewer page
+                submissionStatus.classList.add('hidden'); // Hide status message
+                
+                // When switching to viewer, ensure filter is applied (in case user was searching)
+                handleFilterInput(); 
+            }
+        }
+
+        // --- FORM NAVIGATION LOGIC ---
+
+        let currentStep = 1;
+        const totalSteps = 3;
+        const stepContents = Array.from({length: totalSteps}, (_, i) => document.getElementById(`step-${i + 1}`));
+        const stepTrackers = Array.from({length: totalSteps}, (_, i) => document.getElementById(`step-${i + 1}-tracker`));
+
+
+        /** Updates the progress tracker's visual state (circle color and label color). */
+        function updateProgressTracker() {
+            stepTrackers.forEach((tracker, index) => {
+                const stepNumber = index + 1;
+                const circle = tracker.querySelector('.step-circle');
+                
+                circle.classList.remove('active', 'completed');
+                tracker.classList.remove('completed');
+
+                if (stepNumber < currentStep) {
+                    circle.classList.add('completed');
+                    tracker.classList.add('completed');
+                } else if (stepNumber === currentStep) {
+                    circle.classList.add('active');
+                }
+            });
+        }
+
+
+        /** * Shows a status message (success or error). 
+         * @param {string} message - The message to display.
+         * @param {('success'|'error')} type - The type of message.
+         * @param {boolean} [temporary=false] - Whether to hide after 5 seconds.
+         */
+        function showStatusMessage(message, type, temporary = false) {
+            submissionStatus.textContent = message;
+            submissionStatus.classList.remove('hidden', 'bg-red-100', 'bg-green-100', 'text-red-700', 'text-green-700', 'border-green-300', 'border-red-300');
+            
+            if (type === 'success') {
+                submissionStatus.classList.add('bg-green-100', 'text-green-700', 'border-green-300');
+            } else if (type === 'error') {
+                submissionStatus.classList.add('bg-red-100', 'text-red-700', 'border-red-300');
+            }
+
+            if (temporary) {
+                 setTimeout(() => {
+                    submissionStatus.classList.add('hidden');
+                }, 5000); 
+            }
+        }
+
+
+        /**
+         * Dynamically generates input fields for team members, auto-filling the lead's name.
+         */
+        function updateTeamMemberInputs(value) {
+            const numMembers = parseInt(value) || 1;
+            const leadName = fullNameInput ? fullNameInput.value : '';
+            
+            teamMemberInputsContainer.innerHTML = '';
+
+            if (numMembers > 10) {
+                teamMemberInputsContainer.innerHTML = '<p class="text-red-500">Maximum 10 members allowed.</p>';
+                return;
+            }
+
+            const title = document.createElement('h3');
+            title.className = 'font-semibold text-gray-700';
+            title.textContent = `Team Member Information (Total: ${numMembers})`;
+            teamMemberInputsContainer.appendChild(title);
+
+            for (let i = 1; i <= numMembers; i++) {
+                const isLead = (i === 1);
+                const leadText = isLead ? " (Team Lead, From Step 1)" : "";
+                
+                const nameValue = isLead ? leadName : '';
+                const nameDisabled = isLead ? 'disabled' : '';
+                const nameClass = isLead ? 'bg-gray-200 cursor-not-allowed' : 'focus:border-purple-500 focus:ring-purple-500';
+                const requiredAttr = isLead ? 'data-required="true"' : 'required';
+
+                const memberDiv = document.createElement('div');
+                memberDiv.className = 'mt-4 p-4 border border-gray-200 rounded-lg bg-white shadow-sm';
+                memberDiv.innerHTML = `
+                    <h4 class="font-bold text-sm text-[var(--accent-dark)] mb-3">Member ${i}${leadText}</h4>
+
+                    <!-- Name Input -->
+                    <div>
+                        <label for="member-name-${i}" class="block text-xs font-medium text-gray-600">Full Name *</label>
+                        <input type="text" id="member-name-${i}" name="member-name-${i}" 
+                            class="mt-1 block w-full rounded-lg border border-gray-300 p-2.5 shadow-sm text-sm ${nameClass}" 
+                            value="${nameValue}" ${nameDisabled} ${requiredAttr} required>
+                        ${isLead ? '<p class="text-xs text-purple-500 mt-1">This name is taken from Step 1 and cannot be changed here.</p>' : ''}
+                    </div>
+                    
+                    <!-- Sex/Gender Input -->
+                    <div class="mt-3">
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Sex/Gender *</label>
+                        <div class="flex flex-wrap space-x-4">
+                            <div class="flex items-center">
+                                <input id="sex-member-${i}-male" name="sex-member-${i}" type="radio" value="Male" class="focus:ring-[var(--accent-color)] h-4 w-4 text-[var(--accent-dark)] border-gray-300" required>
+                                <label for="sex-member-${i}-male" class="ml-2 text-sm text-gray-700">Male</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="sex-member-${i}-female" name="sex-member-${i}" type="radio" value="Female" class="focus:ring-[var(--accent-color)] h-4 w-4 text-[var(--accent-dark)] border-gray-300">
+                                <label for="sex-member-${i}-female" class="ml-2 text-sm text-gray-700">Female</label>
+                            </div>
+                            <div class="flex items-center mt-2 sm:mt-0">
+                                <input id="sex-member-${i}-other" name="sex-member-${i}" type="radio" value="Other" class="focus:ring-[var(--accent-color)] h-4 w-4 text-[var(--accent-dark)] border-gray-300">
+                                <label for="sex-member-${i}-other" class="ml-2 text-sm text-gray-700">Other / Prefer not to say</label>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                teamMemberInputsContainer.appendChild(memberDiv);
+            }
+        }
+        
+        /** Transitions the view to the specified step number with a slide effect. */
+        function goToStep(newStep) {
+            if (newStep < 1 || newStep > totalSteps || newStep === currentStep) {
+                return;
+            }
+            
+            submissionStatus.classList.add('hidden');
+
+            if (newStep === 3 && isFirebaseReady) {
+                submitButton.disabled = false;
+                showStatusMessage("Database connection ready. You can submit the form.", 'success', false);
+            } else if (newStep === 3 && !isFirebaseReady) {
+                submitButton.disabled = true;
+                showStatusMessage("Database connection not yet ready. Please wait.", 'error', false);
+            } else {
+                submitButton.disabled = false; 
+            }
+            
+            if (newStep === 2) {
+                const numMembersInput = document.getElementById('numMembers');
+                if (numMembersInput) {
+                    updateTeamMemberInputs(numMembersInput.value);
+                }
+            }
+
+            const direction = newStep > currentStep ? 1 : -1;
+            const currentContent = stepContents[currentStep - 1];
+            const nextContent = stepContents[newStep - 1];
+
+            currentContent.style.transform = `translateX(${-direction * 100}%)`;
+            currentContent.classList.remove('active');
+
+            setTimeout(() => {
+                currentContent.style.transform = `translateX(${direction * 100}%)`;
+                currentContent.style.position = 'absolute';
+                
+                currentStep = newStep;
+                updateProgressTracker();
+
+                nextContent.style.transform = `translateX(${direction * 100}%)`; 
+                nextContent.style.position = 'static';
+                
+                setTimeout(() => {
+                    nextContent.classList.add('active');
+                    nextContent.style.transform = 'translateX(0)';
+                }, 10); 
+                
+            }, 500); 
+        }
+
+        /**
+         * Gathers all form data and saves it to Firestore.
+         */
+        async function saveSubmission() {
+            if (!isFirebaseReady || !db) {
+                showStatusMessage("Error: Database connection not ready. Submission failed.", 'error', false);
+                return;
+            }
+            
+            submitButton.disabled = true;
+            submitButton.classList.add('opacity-70');
+            submitSpinner.classList.remove('hidden');
+            submissionStatus.classList.add('hidden');
+            
+            const formData = {
+                submittedBy: userId,
+                timestamp: new Date().toISOString(),
+                personalDetails: {},
+                teamInfo: {},
+                projectDetails: {}
+            };
+            
+            const form1 = document.getElementById('form-step-1');
+            new FormData(form1).forEach((value, key) => { formData.personalDetails[key] = value; });
+            
+            const form2 = document.getElementById('form-step-2');
+            const data2 = new FormData(form2);
+            formData.teamInfo.teamName = data2.get('teamName');
+            formData.teamInfo.numMembers = data2.get('numMembers');
+            
+            formData.teamInfo.members = [];
+            const numMembers = parseInt(formData.teamInfo.numMembers) || 1;
+            
+            for (let i = 1; i <= numMembers; i++) {
+                const nameInput = document.getElementById(`member-name-${i}`);
+                const sexValue = data2.get(`sex-member-${i}`); 
+                
+                let memberName = "";
+                if (i === 1) {
+                    memberName = formData.personalDetails.fullName;
+                } else if (nameInput) {
+                    memberName = nameInput.value;
+                }
+
+                if (memberName) {
+                    formData.teamInfo.members.push({
+                        name: memberName,
+                        sex: sexValue || 'Not provided',
+                        isLead: i === 1
+                    });
+                }
+            }
+
+            const form3 = document.getElementById('form-step-3');
+            new FormData(form3).forEach((value, key) => { formData.projectDetails[key] = value; });
+
+
+            try {
+                // Store in the PUBLIC collection path
+                const submissionsCollection = collection(db, `artifacts/${appId}/public/data/submissions`);
+                const docRef = await addDoc(submissionsCollection, formData);
+
+                showStatusMessage(`Success! Data saved to Firestore. Document ID: ${docRef.id}. You can view it on the "View Submissions" page.`, 'success', false);
+                console.log("Document successfully written with ID: ", docRef.id, "\nSaved Data:", formData);
+
+                // Clear form inputs after submission (optional, but good UX)
+                form1.reset();
+                form2.reset();
+                form3.reset();
+                goToStep(1); // Return to the first step
+                updateTeamMemberInputs(1); // Reset member inputs
+
+            } catch (e) {
+                console.error("Error adding document: ", e);
+                showStatusMessage("Error: The submission failed. Check console for details.", 'error', false);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.classList.remove('opacity-70');
+                submitSpinner.classList.add('hidden');
+            }
+        }
+
+
+        /** Handles form submission for the current step. */
+        function handleFormSubmission(event, targetStep) {
+            event.preventDefault();
+            const form = event.target;
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            if (currentStep === 3) {
+                saveSubmission();
+            } else {
+                goToStep(targetStep);
+            }
+        }
+
+        // --- VIEWER LOGIC ---
+
+        /** Sets up the real-time listener for the submissions collection. */
+        function fetchSubmissions() {
+             if (!isFirebaseReady || !db) {
+                loadingIndicator.textContent = "Waiting for database connection...";
+                return;
+            }
+            
+            loadingIndicator.style.display = 'block';
+            submissionsList.innerHTML = ''; // Clear old content before loading
+
+            try {
+                const submissionsRef = collection(db, `artifacts/${appId}/public/data/submissions`);
+                const q = query(submissionsRef);
+
+                onSnapshot(q, (snapshot) => {
+                    const submissions = [];
+                    snapshot.forEach((doc) => {
+                        submissions.push({ id: doc.id, ...doc.data() });
+                    });
+                    
+                    // Store the *complete* list globally and reverse it (latest first)
+                    allSubmissions = submissions.reverse(); 
+                    
+                    // Apply the current filter (if any) and render
+                    handleFilterInput(); 
+                    
+                    loadingIndicator.style.display = 'none';
+
+                }, (error) => {
+                    console.error("Error fetching real-time submissions:", error);
+                    loadingIndicator.textContent = "Error loading data. Check console for details.";
+                });
+
+            } catch (error) {
+                console.error("Setup error in fetchSubmissions:", error);
+                loadingIndicator.textContent = "Setup error. Ensure Firebase config is valid.";
+            }
+        }
+        
+        /** * Filters the global 'allSubmissions' array based on the search input.
+         * Renders the resulting list to the DOM.
+         */
+        function handleFilterInput() {
+            const searchTerm = (filterInput.value || '').toLowerCase().trim();
+            let submissionsToRender = allSubmissions;
+
+            if (searchTerm) {
+                submissionsToRender = allSubmissions.filter(data => {
+                    const teamName = (data.teamInfo?.teamName || '').toLowerCase();
+                    const leadName = (data.personalDetails?.fullName || '').toLowerCase();
+                    const docId = data.id.toLowerCase();
+                    
+                    // Search across team name, lead name, and doc ID
+                    return teamName.includes(searchTerm) || 
+                           leadName.includes(searchTerm) ||
+                           docId.includes(searchTerm);
+                });
+            }
+            
+            // Render the filtered or full list
+            renderVisibleSubmissions(submissionsToRender);
+        }
+
+        /** Renders a given array of submissions into the viewer container. */
+        function renderVisibleSubmissions(submissionsToRender) {
+            submissionsList.innerHTML = ''; 
+
+            if (submissionsToRender.length === 0) {
+                submissionsList.innerHTML = `
+                    <div class="p-6 text-center text-gray-500 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
+                        ${filterInput.value ? 'No matching projects found.' : 'No projects submitted yet. Be the first!'}
+                    </div>`;
+                return;
+            }
+
+            submissionsToRender.forEach((data) => {
+                const teamName = data.teamInfo?.teamName || 'N/A';
+                const leadName = data.personalDetails?.fullName || 'N/A';
+                const problem = data.projectDetails?.problemStatement || 'No statement provided.';
+                const submissionDate = data.timestamp ? new Date(data.timestamp).toLocaleString() : 'Unknown Date';
+                const teamSize = data.teamInfo?.numMembers || 1;
+                const membersList = data.teamInfo?.members?.map(m => m.name).join(', ') || 'Members not listed.';
+
+                const card = document.createElement('div');
+                card.className = 'bg-white p-6 border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-shadow';
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-4 border-b pb-3 border-gray-100">
+                        <h3 class="text-xl font-bold text-[var(--accent-dark)]">${teamName}</h3>
+                        <span class="bg-purple-100 text-purple-700 text-xs font-semibold px-3 py-1 rounded-full">${teamSize} Members</span>
+                    </div>
+                    <div class="space-y-3 text-sm">
+                        <p><strong>Team Lead:</strong> ${leadName} (ID: <span class="text-xs font-mono bg-gray-100 px-1 rounded">${data.submittedBy.substring(0, 8)}...</span>)</p>
+                        <p><strong>Submitted On:</strong> ${submissionDate}</p>
+                        <p><strong>Team Members:</strong> ${membersList}</p>
+                        <div class="pt-2">
+                            <h4 class="font-bold text-gray-700 mt-3">Problem Statement:</h4>
+                            <p class="text-gray-600 italic">${problem.substring(0, 150)}${problem.length > 150 ? '...' : ''}</p>
+                        </div>
+                    </div>
+                `;
+                submissionsList.appendChild(card);
+            });
+        }
+
+
+        // --- Event Listeners Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeFirebase(); 
+
+            const numMembersInput = document.getElementById('numMembers');
+            if (numMembersInput) {
+                updateTeamMemberInputs(numMembersInput.value);
+            }
+
+            if (fullNameInput) {
+                fullNameInput.addEventListener('input', () => {
+                    if (currentStep === 2) {
+                        const numMembersInput = document.getElementById('numMembers');
+                        updateTeamMemberInputs(numMembersInput.value);
+                    }
+                });
+            }
+            
+            document.getElementById('form-step-1').addEventListener('submit', (e) => handleFormSubmission(e, 2));
+            document.getElementById('form-step-2').addEventListener('submit', (e) => handleFormSubmission(e, 3));
+            document.getElementById('form-step-3').addEventListener('submit', (e) => handleFormSubmission(e, 3));
+            
+            updateProgressTracker();
+            setPage('form'); // Initial page setup
+        });
+        
+        window.goToStep = goToStep;
+        window.updateTeamMemberInputs = updateTeamMemberInputs;
+        window.setPage = setPage;
+        window.handleFilterInput = handleFilterInput;
+    </script>
+</body>
+</html>
